@@ -445,18 +445,11 @@ text-transform:uppercase;
 
 text-align:center;
 
-background:linear-gradient(
-90deg,
-#ffffff,
-#d6d6d6,
-#ffffff
-);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+color:#f5f5f5;
 
 text-shadow:
-0 4px 18px rgba(0,0,0,0.65);
+0 3px 10px rgba(0,0,0,0.95),
+0 6px 25px rgba(0,0,0,0.85);
 
 position:relative;
 }
@@ -478,12 +471,12 @@ border-radius:10px;
 background:linear-gradient(
 90deg,
 transparent,
-rgba(255,255,255,0.85),
+rgba(255,255,255,0.95),
 transparent
 );
 
 box-shadow:
-0 0 12px rgba(255,255,255,0.25);
+0 0 10px rgba(0,0,0,0.45);
 }
 
 .card{
