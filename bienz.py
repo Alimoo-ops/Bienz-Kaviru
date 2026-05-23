@@ -145,9 +145,60 @@ def home():
 <html>
 <head>
 <title>BIENZ AUDIO STORE</title>
-<meta name="viewport" content="width=device-width, initial-scale=2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow-x:hidden;
+}
+
+.container{
+width:100%;
+max-width:1400px;
+margin:auto;
+padding:20px;
+}
+
+img{
+max-width:100%;
+height:auto;
+display:block;
+}
+
+input,button{
+max-width:100%;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+@media(max-width:768px){
+
+header{
+flex-direction:column;
+gap:15px;
+text-align:center;
+}
+
+.nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+}
+
 body{
 background:url('/static/backgrounds/main_bg.jpg');
 background-size:cover;
@@ -582,24 +633,207 @@ def admin_login():
             return redirect('/admin/dashboard')
 
     return render_template_string('''
-    <body style="
-background:url('/static/backgrounds/login_bg.jpg');
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Login | BIENZ AUDIO STORE</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url('/static/backgrounds/login_bg.jpg');
+
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 background-repeat:no-repeat;
+background-attachment:fixed;
+
+font-family:Arial,sans-serif;
+padding:20px;
+overflow-x:hidden;
+}
+
+.login-box{
+
+width:100%;
+max-width:420px;
+
+background:rgba(20,20,20,0.82);
+
+backdrop-filter:blur(14px);
+
+padding:40px 30px;
+
+border-radius:25px;
+
+border:1px solid rgba(0,255,153,0.25);
+
+box-shadow:
+0 0 30px rgba(0,255,153,0.15),
+0 0 80px rgba(0,0,0,0.7);
+
+text-align:center;
+}
+
+.logo{
+font-size:38px;
+font-weight:bold;
+color:#00ff99;
+margin-bottom:10px;
+letter-spacing:2px;
+}
+
+.subtitle{
+color:#cccccc;
+font-size:15px;
+margin-bottom:35px;
+line-height:1.6;
+}
+
+input{
+
+width:100%;
+padding:16px;
+
+margin-bottom:18px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+background:#111;
+
 color:white;
-font-family:Arial;
-padding:40px;
-">
-    <h1>Admin Login</h1>
-    <form method="POST">
-    <input name="username" placeholder="Admin Username"><br><br>
-    <input type="password" name="password" placeholder="Admin Password"><br><br>
-    <button>Login</button>
-    </form>
-    </body>
-    ''')
+
+font-size:15px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:0.3s;
+}
+
+input:focus{
+border:1px solid #00ff99;
+
+box-shadow:
+0 0 10px rgba(0,255,153,0.35);
+}
+
+button{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:14px;
+
+background:linear-gradient(45deg,#00ff99,#00cc77);
+
+color:black;
+
+font-size:16px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+
+button:hover{
+
+transform:scale(1.03);
+
+box-shadow:
+0 0 20px rgba(0,255,153,0.45);
+}
+
+.footer-text{
+
+margin-top:25px;
+
+font-size:13px;
+
+color:#888;
+}
+
+@media(max-width:500px){
+
+.login-box{
+padding:30px 22px;
+}
+
+.logo{
+font-size:30px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+<div class="logo">
+BIENZ ADMIN
+</div>
+
+<div class="subtitle">
+Secure Administrator Access Panel<br>
+Premium Audio Management System
+</div>
+
+<form method="POST">
+
+<input
+name="username"
+placeholder="Administrator Username"
+required
+>
+
+<input
+type="password"
+name="password"
+placeholder="Administrator Password"
+required
+>
+
+<button type="submit">
+ACCESS DASHBOARD
+</button>
+
+</form>
+
+<div class="footer-text">
+BIENZ AUDIO STORE © 2026
+</div>
+
+</div>
+
+</body>
+</html>
+''')
 
 
 # =========================
