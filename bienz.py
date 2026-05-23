@@ -147,6 +147,7 @@ def home():
 <title>BIENZ AUDIO STORE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
+
 <style>
 
 *{
@@ -261,8 +262,161 @@ margin-left:15px;
 text-decoration:none;
 }
 </style>
+
+/* SPLASH SCREEN */
+
+#splash-screen{
+
+position:fixed;
+top:0;
+left:0;
+
+width:100%;
+height:100vh;
+
+background:
+linear-gradient(rgba(0,0,0,0.88),rgba(0,0,0,0.92)),
+url('/static/backgrounds/main_bg.jpg');
+
+background-size:cover;
+background-position:center;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+z-index:999999;
+
+transition:0.8s ease;
+}
+
+.splash-logo{
+
+width:170px;
+
+animation:
+logoFloat 3s ease-in-out infinite,
+logoGlow 2s infinite alternate;
+}
+
+.splash-title{
+
+margin-top:25px;
+
+font-size:55px;
+
+font-weight:bold;
+
+letter-spacing:4px;
+
+color:#00ff99;
+
+text-align:center;
+
+text-shadow:
+0 0 10px #00ff99,
+0 0 25px #00ff99,
+0 0 50px rgba(0,255,153,0.7);
+
+animation:fadeText 2s ease;
+}
+
+.loader{
+
+margin-top:35px;
+
+width:70px;
+height:70px;
+
+border:5px solid rgba(255,255,255,0.08);
+
+border-top:5px solid #00ff99;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+@keyframes logoFloat{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+@keyframes logoGlow{
+
+from{
+filter:drop-shadow(0 0 5px #00ff99);
+}
+
+to{
+filter:drop-shadow(0 0 25px #00ff99);
+}
+
+}
+
+@keyframes fadeText{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@media(max-width:768px){
+
+.splash-title{
+font-size:32px;
+padding:0 20px;
+}
+
+.splash-logo{
+width:120px;
+}
+
+}
+
 </head>
 <body>
+
+<div id="splash-screen">
+
+<img src="/static/banana.png" class="splash-logo">
+
+<h1 class="splash-title">
+BIENZ AUDIO STORE
+</h1>
+
+<div class="loader"></div>
+
+</div>
+
+<div id="main-content" style="display:none;">
 <header>
 <div class="logo">BIENZ AUDIO STORE</div>
 <div class="nav">
@@ -295,6 +449,30 @@ text-decoration:none;
 {% endfor %}
 </div>
 </div>
+</div>
+
+<script>
+
+window.addEventListener("load", () => {
+
+setTimeout(() => {
+
+document.getElementById("splash-screen").style.opacity = "0";
+
+setTimeout(() => {
+
+document.getElementById("splash-screen").style.display = "none";
+
+document.getElementById("main-content").style.display = "block";
+
+}, 800);
+
+}, 3200);
+
+});
+
+</script>
+
 </body>
 </html>
     ''', audios=audios)
