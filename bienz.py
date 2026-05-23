@@ -790,24 +790,172 @@ def login():
         flash("Invalid credentials")
 
     return render_template_string('''
-    <body style="
-background:url('/static/backgrounds/login_bg.jpg');
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Login | BIENZ AUDIO STORE</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.85)),
+url('/static/backgrounds/login_bg.jpg');
+
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 background-repeat:no-repeat;
+background-attachment:fixed;
+
 color:white;
-font-family:Arial;
-padding:40px;
-">
-    <h1>User Login</h1>
-    <form method="POST">
-    <input name="username" placeholder="Username" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button>Login</button>
-    </form>
-    </body>
-    ''')
+padding:20px;
+}
+
+.login-box{
+width:100%;
+max-width:650px;
+
+padding:50px 35px;
+
+background:rgba(20,20,20,0.85);
+backdrop-filter:blur(14px);
+
+border-radius:25px;
+
+border:1px solid rgba(0,255,204,0.25);
+
+box-shadow:
+0 0 30px rgba(0,255,204,0.12),
+0 0 80px rgba(0,0,0,0.7);
+
+text-align:center;
+}
+
+.logo{
+font-size:42px;
+font-weight:900;
+color:#00ffcc;
+letter-spacing:3px;
+margin-bottom:10px;
+
+text-shadow:
+0 0 10px rgba(0,255,204,0.6),
+0 0 25px rgba(0,255,204,0.4);
+}
+
+.subtitle{
+color:#ddd;
+margin-bottom:35px;
+font-size:16px;
+}
+
+input{
+width:100%;
+padding:18px;
+
+margin-bottom:15px;
+
+border:none;
+outline:none;
+
+border-radius:12px;
+
+background:#111;
+color:white;
+
+font-size:16px;
+
+border:1px solid rgba(255,255,255,0.1);
+
+transition:0.3s;
+}
+
+input:focus{
+border:1px solid #00ffcc;
+box-shadow:0 0 10px rgba(0,255,204,0.35);
+}
+
+button{
+width:100%;
+padding:18px;
+
+border:none;
+border-radius:12px;
+
+background:linear-gradient(45deg,#00ffcc,#00ccff);
+
+color:black;
+font-weight:bold;
+font-size:18px;
+
+cursor:pointer;
+transition:0.3s;
+
+box-shadow:0 0 15px rgba(0,255,204,0.25);
+}
+
+button:hover{
+transform:scale(1.03);
+box-shadow:0 0 25px rgba(0,255,204,0.5);
+}
+
+.footer{
+margin-top:20px;
+font-size:13px;
+color:#888;
+}
+
+a{
+color:#00ffcc;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+<div class="logo">BIENZ AUDIO</div>
+
+<div class="subtitle">
+Secure User Access Portal
+</div>
+
+<form method="POST">
+
+<input name="username" placeholder="Username" required>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<button type="submit">LOGIN</button>
+
+</form>
+
+<div class="footer">
+Don't have an account? <a href="/register">Register</a>
+</div>
+
+</div>
+
+</body>
+</html>
+''')
 
 
 # =========================
