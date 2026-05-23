@@ -672,7 +672,7 @@ overflow-x:hidden;
 .login-box{
 
 width:100%;
-max-width:420px;
+max-width:560px;
 
 background:rgba(20,20,20,0.82);
 
@@ -692,24 +692,31 @@ text-align:center;
 }
 
 .logo{
-font-size:38px;
-font-weight:bold;
+font-size:58px;
+font-weight:900;
 color:#00ff99;
-margin-bottom:10px;
-letter-spacing:2px;
+margin-bottom:18px;
+letter-spacing:4px;
+
+text-shadow:
+0 0 10px rgba(0,255,153,0.7),
+0 0 25px rgba(0,255,153,0.5),
+0 0 45px rgba(0,255,153,0.35);
 }
 
 .subtitle{
-color:#cccccc;
-font-size:15px;
-margin-bottom:35px;
-line-height:1.6;
-}
+color:#f1f1f1;
+font-size:20px;
+font-weight:500;
+margin-bottom:40px;
+line-height:1.8;
+letter-spacing:1px;
+}}
 
 input{
 
 width:100%;
-padding:16px;
+padding:20px;
 
 margin-bottom:18px;
 
@@ -722,7 +729,7 @@ background:#111;
 
 color:white;
 
-font-size:15px;
+font-size:19px;
 
 border:1px solid rgba(255,255,255,0.08);
 
@@ -740,7 +747,7 @@ button{
 
 width:100%;
 
-padding:16px;
+padding:20px;
 
 border:none;
 
@@ -750,7 +757,7 @@ background:linear-gradient(45deg,#00ff99,#00cc77);
 
 color:black;
 
-font-size:16px;
+font-size:22px;
 
 font-weight:bold;
 
