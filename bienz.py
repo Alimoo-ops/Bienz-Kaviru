@@ -222,22 +222,50 @@ top:0;
 }
 .logo{
 
-font-size:32px;
+.logo{
 
-font-weight:800;
+font-size:34px;
 
-color:#eafef8;
+font-weight:900;
 
-letter-spacing:2px;
+letter-spacing:3px;
 
 text-transform:uppercase;
 
+color:#ffffff;
+
 text-shadow:
-0 0 4px rgba(0,255,204,0.18),
-0 0 10px rgba(0,255,204,0.12);
+0 2px 6px rgba(0,0,0,0.95),
+0 5px 18px rgba(0,0,0,0.75);
 
 animation:none;
+
+position:relative;
 }
+
+.logo::after{
+
+content:"";
+
+display:block;
+
+width:90px;
+
+height:2px;
+
+margin-top:8px;
+
+background:linear-gradient(
+90deg,
+rgba(255,255,255,0.9),
+transparent
+);
+
+border-radius:10px;
+
+opacity:0.8;
+}
+
 .container{
 padding:20px;
 }
