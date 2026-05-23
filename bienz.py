@@ -670,9 +670,10 @@ overflow-x:hidden;
 }
 
 .login-box{
-
 width:100%;
-max-width:560px;
+max-width:720px;
+
+padding:70px 60px;
 
 background:rgba(20,20,20,0.82);
 
@@ -716,7 +717,7 @@ letter-spacing:1px;
 input{
 
 width:100%;
-padding:20px;
+padding:24px;
 
 margin-bottom:18px;
 
@@ -747,7 +748,7 @@ button{
 
 width:100%;
 
-padding:20px;
+padding:24px;
 
 border:none;
 
