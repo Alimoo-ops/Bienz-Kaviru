@@ -221,9 +221,24 @@ position:sticky;
 top:0;
 }
 .logo{
-font-size:28px;
-font-weight:bold;
-color:#00ff99;
+
+font-size:32px;
+
+font-weight:900;
+
+color:#00ffcc;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+text-shadow:
+0 0 5px #00ffcc,
+0 0 10px #00ffcc,
+0 0 20px #00ffcc,
+0 0 40px rgba(0,255,204,0.7);
+
+animation:neonPulse 2s infinite alternate;
 }
 .container{
 padding:20px;
@@ -257,9 +272,33 @@ border-radius:10px;
 margin-top:10px;
 }
 .nav a{
-color:white;
-margin-left:15px;
+
+color:#ffffff;
+
+margin-left:18px;
+
 text-decoration:none;
+
+font-weight:bold;
+
+font-size:16px;
+
+transition:0.3s;
+
+text-shadow:
+0 0 5px rgba(255,255,255,0.4);
+}
+
+.nav a:hover{
+
+color:#00ffcc;
+
+text-shadow:
+0 0 5px #00ffcc,
+0 0 15px #00ffcc,
+0 0 25px #00ffcc;
+
+transform:scale(1.08);
 }
 
 #splash-screen{
@@ -394,6 +433,111 @@ height:55px;
 
 }
 
+.neon-heading{
+
+font-size:42px;
+
+margin-bottom:30px;
+
+font-weight:900;
+
+text-transform:uppercase;
+
+letter-spacing:3px;
+
+color:#00ffcc;
+
+text-align:center;
+
+text-shadow:
+0 0 5px #00ffcc,
+0 0 10px #00ffcc,
+0 0 20px #00ffcc,
+0 0 40px rgba(0,255,204,0.8);
+
+animation:neonPulse 2s infinite alternate;
+}
+
+.card{
+
+background:rgba(10,10,10,0.82);
+
+border-radius:20px;
+
+overflow:hidden;
+
+border:1px solid rgba(0,255,204,0.15);
+
+backdrop-filter:blur(10px);
+
+box-shadow:
+0 0 15px rgba(0,255,204,0.08),
+0 0 40px rgba(0,0,0,0.6);
+
+transition:0.35s;
+}
+
+.card:hover{
+
+transform:translateY(-8px) scale(1.02);
+
+box-shadow:
+0 0 20px rgba(0,255,204,0.25),
+0 0 50px rgba(0,255,204,0.18);
+}
+
+.btn{
+
+display:inline-block;
+
+padding:12px 22px;
+
+background:linear-gradient(45deg,#00ffcc,#00ccff);
+
+color:black;
+
+font-weight:bold;
+
+text-decoration:none;
+
+border-radius:14px;
+
+margin-top:12px;
+
+transition:0.3s;
+
+box-shadow:
+0 0 10px rgba(0,255,204,0.35);
+}
+
+.btn:hover{
+
+transform:scale(1.05);
+
+box-shadow:
+0 0 20px rgba(0,255,204,0.55);
+}
+
+@keyframes neonPulse{
+
+from{
+
+text-shadow:
+0 0 5px #00ffcc,
+0 0 10px #00ffcc,
+0 0 20px #00ffcc;
+}
+
+to{
+
+text-shadow:
+0 0 10px #00ffcc,
+0 0 20px #00ffcc,
+0 0 40px #00ffcc,
+0 0 70px rgba(0,255,204,0.9);
+}
+}
+
 </style>
 </head>
 
@@ -411,8 +555,10 @@ BIENZ AUDIO STORE
 
 <div id="main-content" style="display:none;">
 <header>
-<div class="logo">BIENZ AUDIO STORE</div>
-<div class="nav">
+<div class="logo neon-logo">
+BIENZ AUDIO STORE
+</div>
+<div class="nav neon-nav">
 <a href="/">Home</a>
 {% if session.get('user_id') %}
 <a href="/dashboard">Dashboard</a>
@@ -426,7 +572,9 @@ BIENZ AUDIO STORE
 </header>
 
 <div class="container">
-<h2>Premium Audio Marketplace</h2>
+<h2 class="neon-heading">
+Premium Audio Marketplace
+</h2>
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
