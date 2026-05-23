@@ -390,19 +390,16 @@ transform:translateY(0);
 
 @media(max-width:768px){
 
-.splash-title{
-font-size:32px;
-padding:0 20px;
-}
-
-.splash-logo{
-width:120px;
+.loader{
+width:55px;
+height:55px;
 }
 
 }
+
+</style>
 
 </head>
-<body>
 
 <div id="splash-screen">
 
@@ -466,6 +463,30 @@ document.getElementById("splash-screen").style.display = "none";
 document.getElementById("main-content").style.display = "block";
 
 }, 800);
+
+}, 3200);
+
+});
+
+</script>
+
+</div>
+
+<script>
+
+window.addEventListener("load", () => {
+
+setTimeout(() => {
+
+document.getElementById("splash-screen").style.opacity = "0";
+
+setTimeout(() => {
+
+document.getElementById("splash-screen").style.display = "none";
+
+document.getElementById("main-content").style.display = "block";
+
+}, 1000);
 
 }, 3200);
 
