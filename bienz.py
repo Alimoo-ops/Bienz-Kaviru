@@ -222,25 +222,21 @@ top:0;
 }
 .logo{
 
-.logo{
+font-size:32px;
 
-font-size:34px;
+font-weight:800;
 
-font-weight:900;
+color:#eafef8;
 
-letter-spacing:3px;
+letter-spacing:2px;
 
 text-transform:uppercase;
 
-color:#ffffff;
-
 text-shadow:
-0 2px 6px rgba(0,0,0,0.95),
-0 5px 18px rgba(0,0,0,0.75);
+0 0 4px rgba(0,255,204,0.18),
+0 0 10px rgba(0,255,204,0.12);
 
 animation:none;
-
-position:relative;
 }
 .container{
 padding:20px;
