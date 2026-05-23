@@ -865,35 +865,359 @@ def admin_dashboard():
     conn.close()
 
     return render_template_string('''
-    <body style="
-background:url('/static/backgrounds/login_bg.jpg');
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>BIENZ ADMIN DASHBOARD</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+background:
+linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
+url('/static/backgrounds/admin_bg.jpg');
+
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 background-repeat:no-repeat;
+background-attachment:fixed;
+
+font-family:Arial,sans-serif;
+
 color:white;
-font-family:Arial;
-padding:40px;
-">
-    <h1>Admin Dashboard</h1>
 
-    <h3>Total Users: {{ users['total'] }}</h3>
-    <h3>Total Purchases: {{ purchases['total'] }}</h3>
-    <h3>Total Revenue: KES {{ revenue['total'] or 0 }}</h3>
+overflow-x:hidden;
+}
 
-    <a href="/admin/upload">Upload Audio</a>
+.container{
+width:100%;
+max-width:1500px;
+margin:auto;
+padding:35px;
+}
 
-    <hr>
+.topbar{
 
-    {% for audio in audios %}
-    <div style="background:#222;padding:20px;margin-bottom:20px;border-radius:10px;">
-    <h2>{{ audio['title'] }}</h2>
-    <p>KES {{ audio['price'] }}</p>
-    </div>
-    {% endfor %}
+display:flex;
+justify-content:space-between;
+align-items:center;
 
-    </body>
-    ''', audios=audios, users=users, purchases=purchases, revenue=revenue)
+flex-wrap:wrap;
+
+gap:20px;
+
+margin-bottom:40px;
+}
+
+.logo{
+
+font-size:48px;
+font-weight:900;
+color:#00ff99;
+
+letter-spacing:3px;
+
+text-shadow:
+0 0 10px rgba(0,255,153,0.7),
+0 0 30px rgba(0,255,153,0.4);
+}
+
+.upload-btn{
+
+padding:18px 28px;
+
+background:linear-gradient(45deg,#00ff99,#00cc77);
+
+color:black;
+
+font-size:18px;
+
+font-weight:bold;
+
+text-decoration:none;
+
+border-radius:18px;
+
+transition:0.3s;
+}
+
+.upload-btn:hover{
+
+transform:scale(1.05);
+
+box-shadow:
+0 0 25px rgba(0,255,153,0.4);
+}
+
+.stats-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(300px,1fr));
+
+gap:25px;
+
+margin-bottom:45px;
+}
+
+.stat-card{
+
+background:rgba(20,20,20,0.82);
+
+backdrop-filter:blur(15px);
+
+padding:35px;
+
+border-radius:25px;
+
+border:1px solid rgba(0,255,153,0.18);
+
+box-shadow:
+0 0 25px rgba(0,255,153,0.08),
+0 0 80px rgba(0,0,0,0.6);
+
+transition:0.3s;
+}
+
+.stat-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+0 0 30px rgba(0,255,153,0.22);
+}
+
+.stat-title{
+
+font-size:18px;
+
+color:#aaaaaa;
+
+margin-bottom:15px;
+}
+
+.stat-value{
+
+font-size:42px;
+
+font-weight:bold;
+
+color:#00ff99;
+}
+
+.section-title{
+
+font-size:34px;
+
+margin-bottom:30px;
+
+color:#00ff99;
+
+font-weight:900;
+}
+
+.audio-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(320px,1fr));
+
+gap:25px;
+}
+
+.audio-card{
+
+background:rgba(18,18,18,0.84);
+
+backdrop-filter:blur(14px);
+
+border-radius:25px;
+
+overflow:hidden;
+
+border:1px solid rgba(0,255,153,0.15);
+
+transition:0.3s;
+
+box-shadow:
+0 0 20px rgba(0,0,0,0.45);
+}
+
+.audio-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:
+0 0 30px rgba(0,255,153,0.2);
+}
+
+.audio-image{
+
+width:100%;
+height:250px;
+object-fit:cover;
+}
+
+.audio-content{
+padding:25px;
+}
+
+.audio-title{
+
+font-size:26px;
+
+font-weight:bold;
+
+margin-bottom:12px;
+}
+
+.audio-price{
+
+font-size:22px;
+
+color:#00ff99;
+
+font-weight:bold;
+}
+
+.audio-date{
+
+margin-top:10px;
+
+color:#aaaaaa;
+
+font-size:14px;
+}
+
+@media(max-width:768px){
+
+.container{
+padding:20px;
+}
+
+.logo{
+font-size:34px;
+}
+
+.section-title{
+font-size:28px;
+}
+
+.stat-value{
+font-size:32px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<div class="logo">
+BIENZ ADMIN
+</div>
+
+<a class="upload-btn" href="/admin/upload">
+UPLOAD AUDIO
+</a>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-title">
+TOTAL USERS
+</div>
+
+<div class="stat-value">
+{{ users['total'] }}
+</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-title">
+TOTAL PURCHASES
+</div>
+
+<div class="stat-value">
+{{ purchases['total'] }}
+</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-title">
+TOTAL REVENUE
+</div>
+
+<div class="stat-value">
+KES {{ revenue['total'] or 0 }}
+</div>
+</div>
+
+</div>
+
+<div class="section-title">
+UPLOADED TRACKS
+</div>
+
+<div class="audio-grid">
+
+{% for audio in audios %}
+
+<div class="audio-card">
+
+<img
+class="audio-image"
+src="/{{ audio['cover_image'] }}"
+>
+
+<div class="audio-content">
+
+<div class="audio-title">
+{{ audio['title'] }}
+</div>
+
+<div class="audio-price">
+KES {{ audio['price'] }}
+</div>
+
+<div class="audio-date">
+{{ audio['genre'] }} • {{ audio['duration'] }}
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>
+
+''', audios=audios, users=users, purchases=purchases, revenue=revenue)
 
 
 # =========================
