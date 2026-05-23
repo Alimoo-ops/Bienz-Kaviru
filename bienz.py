@@ -261,9 +261,6 @@ color:white;
 margin-left:15px;
 text-decoration:none;
 }
-</style>
-
-/* SPLASH SCREEN */
 
 #splash-screen{
 
@@ -398,7 +395,6 @@ height:55px;
 }
 
 </style>
-
 </head>
 
 <div id="splash-screen">
@@ -446,30 +442,6 @@ BIENZ AUDIO STORE
 {% endfor %}
 </div>
 </div>
-</div>
-
-<script>
-
-window.addEventListener("load", () => {
-
-setTimeout(() => {
-
-document.getElementById("splash-screen").style.opacity = "0";
-
-setTimeout(() => {
-
-document.getElementById("splash-screen").style.display = "none";
-
-document.getElementById("main-content").style.display = "block";
-
-}, 800);
-
-}, 3200);
-
-});
-
-</script>
-
 </div>
 
 <script>
