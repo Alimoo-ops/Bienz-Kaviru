@@ -433,25 +433,57 @@ height:55px;
 
 .neon-heading{
 
-font-size:42px;
+font-size:48px;
 
-margin-bottom:30px;
+margin-bottom:35px;
 
 font-weight:900;
 
+letter-spacing:4px;
+
 text-transform:uppercase;
-
-letter-spacing:3px;
-
-color:#00ffcc;
 
 text-align:center;
 
-text-shadow:
-0 0 5px rgba(0,255,204,0.25),
-0 0 12px rgba(0,255,204,0.15);
+background:linear-gradient(
+90deg,
+#ffffff,
+#d6d6d6,
+#ffffff
+);
 
-animation:none;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+text-shadow:
+0 4px 18px rgba(0,0,0,0.65);
+
+position:relative;
+}
+
+.neon-heading::after{
+
+content:"";
+
+display:block;
+
+width:140px;
+
+height:3px;
+
+margin:14px auto 0 auto;
+
+border-radius:10px;
+
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,0.85),
+transparent
+);
+
+box-shadow:
+0 0 12px rgba(255,255,255,0.25);
 }
 
 .card{
