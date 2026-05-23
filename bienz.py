@@ -224,21 +224,19 @@ top:0;
 
 font-size:32px;
 
-font-weight:900;
+font-weight:800;
 
-color:#00ffcc;
+color:#eafef8;
 
-letter-spacing:3px;
+letter-spacing:2px;
 
 text-transform:uppercase;
 
 text-shadow:
-0 0 5px #00ffcc,
-0 0 10px #00ffcc,
-0 0 20px #00ffcc,
-0 0 40px rgba(0,255,204,0.7);
+0 0 4px rgba(0,255,204,0.18),
+0 0 10px rgba(0,255,204,0.12);
 
-animation:neonPulse 2s infinite alternate;
+animation:none;
 }
 .container{
 padding:20px;
@@ -450,12 +448,10 @@ color:#00ffcc;
 text-align:center;
 
 text-shadow:
-0 0 5px #00ffcc,
-0 0 10px #00ffcc,
-0 0 20px #00ffcc,
-0 0 40px rgba(0,255,204,0.8);
+0 0 5px rgba(0,255,204,0.25),
+0 0 12px rgba(0,255,204,0.15);
 
-animation:neonPulse 2s infinite alternate;
+animation:none;
 }
 
 .card{
