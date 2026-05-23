@@ -1667,7 +1667,36 @@ def upload_audio():
         cover_path = os.path.join(COVER_FOLDER, cover_filename)
 
         audio_file.save(audio_path)
-        cover_file.save(cover_path)
+        image = Image.open(cover_file)
+
+if image.mode in ("RGBA", "P"):
+    image = image.convert("RGB")
+
+# resize large images
+max_width = 900
+
+if image.width > max_width:
+
+    ratio = max_width / float(image.width)
+
+    new_height = int(float(image.height) * ratio)
+
+    image = image.resize(
+        (max_width, new_height),
+        Image.LANCZOS
+    )
+
+# save optimized WEBP
+webp_filename = os.path.splitext(cover_filename)[0] + ".webp"
+
+webp_path = os.path.join(COVER_FOLDER, webp_filename)
+
+image.save(
+    webp_path,
+    "WEBP",
+    quality=68,
+    optimize=True
+)
 
         conn = get_db()
 
@@ -1684,7 +1713,7 @@ def upload_audio():
         ''', (
             title,
             audio_filename,
-            f"static/covers/{cover_filename}",
+            f"static/covers/{webp_filename}",
             genre,
             price,
             duration,
