@@ -203,9 +203,9 @@ gap:10px;
 
 body{
 background:url('/static/backgrounds/main_bg.jpg');
+background-attachment:scroll;
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 background-repeat:no-repeat;
 font-family:Arial;
 color:white;
@@ -561,12 +561,11 @@ height:55px;
     letter-spacing:4px;
     text-transform:uppercase;
     text-align:center;
-    color:#00ffcc;
+    color:#eafffa;
 
     text-shadow:
-    0 0 10px #00ffcc,
-    0 0 25px #00ffcc,
-    0 0 45px rgba(0,255,204,0.8);
+    0 2px 8px rgba(0,0,0,0.75),
+    0 0 12px rgba(255,255,255,0.08);
 
     animation: danceText 1.8s infinite ease-in-out;
 }
