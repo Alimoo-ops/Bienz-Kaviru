@@ -827,7 +827,7 @@ document.getElementById("main-content").style.display = "block";
 
 <div class="social-links">
 
-<a href="https://instagram.com/biezkaviru" target="_blank">
+<a href="https://instagram.com/biez_kaviru" target="_blank">
 Instagram
 </a>
 
