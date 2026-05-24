@@ -333,6 +333,12 @@ box-shadow:0 0 10px rgba(0,0,0,0.4);
 width:100%;
 height:220px;
 object-fit:cover;
+transition:0.4s;
+}
+
+.card:hover img{
+transform:scale(1.08);
+filter:brightness(1.2) saturate(1.2);
 }
 .card-content{
 padding:15px;
@@ -499,6 +505,43 @@ transform:translateY(0);
 
 }
 
+.splash-sub{
+margin-top:10px;
+font-size:18px;
+color:#bfffea;
+text-shadow:0 0 10px rgba(0,255,153,0.5);
+animation:fadeText 2s ease;
+}
+
+/* animated equalizer */
+.music-bars{
+margin-top:30px;
+display:flex;
+gap:5px;
+align-items:flex-end;
+height:60px;
+}
+
+.music-bars span{
+width:6px;
+height:20px;
+background:#00ff99;
+display:block;
+animation:beat 1s infinite ease-in-out;
+border-radius:4px;
+box-shadow:0 0 10px #00ff99;
+}
+
+.music-bars span:nth-child(2){animation-delay:0.1s;}
+.music-bars span:nth-child(3){animation-delay:0.2s;}
+.music-bars span:nth-child(4){animation-delay:0.3s;}
+.music-bars span:nth-child(5){animation-delay:0.4s;}
+
+@keyframes beat{
+0%,100%{height:15px;}
+50%{height:60px;}
+}
+
 @media(max-width:768px){
 
 .loader{
@@ -556,6 +599,34 @@ transparent
 
 box-shadow:
 0 0 10px rgba(0,0,0,0.45);
+}
+
+.tagline-badges{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin-top:10px;
+margin-bottom:25px;
+}
+
+.tagline-badges span{
+padding:10px 16px;
+border-radius:30px;
+background:rgba(0,255,204,0.12);
+border:1px solid rgba(0,255,204,0.25);
+color:#00ffcc;
+font-weight:bold;
+font-size:14px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 15px rgba(0,255,204,0.12);
+animation:pulseTag 2s infinite;
+}
+
+@keyframes pulseTag{
+0%{transform:scale(1);}
+50%{transform:scale(1.05);}
+100%{transform:scale(1);}
 }
 
 .card{
@@ -644,10 +715,16 @@ text-shadow:
 <div id="splash-screen">
 
 <h1 class="splash-title">
-BIEZ KAVIRU MUSIC STORE
+🎧 KAVIRU ENTERTAINMENT 🎧
 </h1>
 
-<div class="loader"></div>
+<p class="splash-sub">
+Loading premium sound experience...
+</p>
+
+<div class="music-bars">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
 
 </div>
 
@@ -671,8 +748,14 @@ BIEZ KAVIRU MUSIC STORE
 
 <div class="container">
 <h2 class="neon-heading">
-Welcome to Kaviru Entertainment Home
+🔥 Welcome to Kaviru Entertainment 🔥
 </h2>
+
+<div class="tagline-badges">
+  <span>🎵 Premium Audio</span>
+  <span>💎 Exclusive Drops</span>
+  <span>⚡ Instant Access</span>
+</div>
 
 <p style="
 text-align:center;
