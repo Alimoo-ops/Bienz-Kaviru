@@ -1664,7 +1664,7 @@ transition:0.3s;
 
 /* 🔥 placeholder fix */
 input::placeholder{
-font-size:18px;
+font-size:20px;
 color:rgba(255,255,255,0.6);
 letter-spacing:0.5px;
 }
