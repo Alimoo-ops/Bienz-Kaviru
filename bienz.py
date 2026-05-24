@@ -1599,24 +1599,23 @@ overflow-x:hidden;
 .login-box{
 width:100%;
 max-width:720px;
-
-padding:70px 60px;
-
+padding:60px 50px;
 background:rgba(20,20,20,0.82);
-
 backdrop-filter:blur(14px);
-
-padding:40px 30px;
-
 border-radius:25px;
-
 border:1px solid rgba(0,255,153,0.25);
-
-box-shadow:
-0 0 30px rgba(0,255,153,0.15),
+box-shadow:0 0 30px rgba(0,255,153,0.15),
 0 0 80px rgba(0,0,0,0.7);
-
 text-align:center;
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:18px;
 }
 
 .logo{
@@ -1644,22 +1643,20 @@ letter-spacing:1px;
 input{
 width:100%;
 padding:22px 20px;
-
 margin-bottom:18px;
-
 border:none;
 outline:none;
-
 border-radius:14px;
-
 background:#111;
 color:white;
+font-size:22px;
+line-height:1.4;
+}
 
-font-size:20px;   /* 🔥 bigger typing text */
-
-border:1px solid rgba(255,255,255,0.08);
-
-transition:0.3s;
+input::placeholder{
+font-size:22px;
+color:rgba(255,255,255,0.85);
+font-weight:500;
 }
 
 /* 🔥 placeholder fix */
