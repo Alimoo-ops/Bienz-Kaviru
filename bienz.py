@@ -1137,32 +1137,111 @@ def dashboard():
     conn.close()
 
     return render_template_string('''
-    <body style="
-background:url('/static/backgrounds/admin_bg.jpg');
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+color:white;
+background:url('/static/backgrounds/main_bg.jpg');
 background-size:cover;
 background-position:center;
 background-attachment:fixed;
-background-repeat:no-repeat;
-color:white;
-font-family:Arial;
-padding:40px;
-">
-    <h1>Welcome {{ session['username'] }}</h1>
+}
 
-    <h2>Your Purchases</h2>
+.container{
+max-width:1100px;
+margin:auto;
+padding:30px;
+}
 
-    {% for item in purchases %}
-    <div style="background:#222;padding:20px;margin-bottom:15px;border-radius:10px;">
-    <h3>{{ item['title'] }}</h3>
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(0,255,204,0.2);
+border-radius:15px;
+margin-bottom:25px;
+}
+
+.header h1{
+color:#00ffcc;
+text-shadow:0 0 10px rgba(0,255,204,0.4);
+}
+
+.card{
+background:rgba(0,0,0,0.55);
+backdrop-filter:blur(12px);
+border:1px solid rgba(0,255,204,0.15);
+border-radius:18px;
+padding:20px;
+margin-bottom:15px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 25px rgba(0,255,204,0.2);
+}
+
+.btn{
+display:inline-block;
+padding:10px 16px;
+background:linear-gradient(45deg,#00ffcc,#00ccff);
+color:black;
+border-radius:12px;
+text-decoration:none;
+font-weight:bold;
+margin-right:8px;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+.section-title{
+color:#00ffcc;
+font-size:24px;
+margin:20px 0 10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>Welcome {{ session['username'] }}</h1>
+<a class="btn" href="/logout">Logout</a>
+</div>
+
+<div class="section-title">Your Purchases</div>
+
+{% for item in purchases %}
+<div class="card">
+    <h2>{{ item['title'] }}</h2>
     <p>Downloads Remaining: {{ item['downloads_remaining'] }}</p>
 
-    <a href="/stream/{{ item['audio_id'] }}">Stream</a>
-    |
-    <a href="/download/{{ item['audio_id'] }}">Download</a>
-    </div>
-    {% endfor %}
-    </body>
-    ''', purchases=purchases)
+    <a class="btn" href="/stream/{{ item['audio_id'] }}">Stream</a>
+    <a class="btn" href="/download/{{ item['audio_id'] }}">Download</a>
+</div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>
 
 
 # =========================
