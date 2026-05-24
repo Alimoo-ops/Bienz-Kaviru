@@ -1642,17 +1642,21 @@ letter-spacing:1px;
 
 input{
 width:100%;
-padding:22px 20px;
+padding:30px 22px;   /* ↑ increases height */
 margin-bottom:18px;
+
 border:none;
 outline:none;
 border-radius:14px;
+
 background:#111;
 color:white;
 
 font-size:22px;
-font-weight:600;   /* IMPORTANT FIX */
+font-weight:600;
 letter-spacing:0.5px;
+
+line-height:1.6;  /* helps vertical breathing space */
 }
 
 input::placeholder{
