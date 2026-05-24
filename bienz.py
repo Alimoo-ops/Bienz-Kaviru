@@ -671,8 +671,33 @@ BIEZ KAVIRU MUSIC STORE
 
 <div class="container">
 <h2 class="neon-heading">
-Premium Audio Marketplace
+Welcome to Kaviru Entertainment Home
 </h2>
+
+<p style="
+text-align:center;
+max-width:900px;
+margin:20px auto 50px auto;
+font-size:20px;
+line-height:1.8;
+color:#f5f5f5;
+
+text-shadow:
+0 2px 8px rgba(0,0,0,0.9);
+
+background:rgba(0,0,0,0.35);
+
+padding:22px 28px;
+
+border-radius:18px;
+
+backdrop-filter:blur(10px);
+
+border:1px solid rgba(255,255,255,0.08);
+">
+Experience the sound of passion, creativity, and authentic entertainment.
+Discover premium audio content crafted to inspire, entertain, and connect you to the Kaviru vibe.
+</p>
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
