@@ -512,6 +512,8 @@ height:55px;
 
 font-size:48px;
 
+margin-top:45vh;
+
 margin-bottom:35px;
 
 font-weight:900;
