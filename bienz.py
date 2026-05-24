@@ -748,8 +748,8 @@ BIEZ KAVIRU MUSIC STORE
 </header>
 
 <div class="container">
-<h2 class="cinema-heading">
-WELCOME TO KAVIRU ENTERTAINMENT
+<h2 class="neon-heading">
+🔥 Welcome to Kaviru Entertainment 🔥
 </h2>
 
 <div class="tagline-badges">
