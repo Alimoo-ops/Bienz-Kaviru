@@ -358,7 +358,7 @@ font-weight:bold;
 
 font-size:16px;
 
-transition:0.3s;
+transition:0.2s;
 
 text-shadow:
 0 0 5px rgba(255,255,255,0.4);
@@ -685,7 +685,7 @@ color:#f5f5f5;
 text-shadow:
 0 2px 8px rgba(0,0,0,0.9);
 
-background:rgba(0,0,0,0.35);
+background:rgba(0,0,0,0.25);
 
 padding:22px 28px;
 
