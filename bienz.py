@@ -737,6 +737,157 @@ document.getElementById("main-content").style.display = "block";
 
 </script>
 
+<footer class="social-footer">
+
+<h3>Connect With BIEZ KAVIRU</h3>
+
+<div class="social-links">
+
+<a href="https://instagram.com/biezkaviru" target="_blank">
+Instagram
+</a>
+
+<a href="https://facebook.com/biezkaviru" target="_blank">
+Facebook
+</a>
+
+<a href="https://tiktok.com/@biezkaviru" target="_blank">
+TikTok
+</a>
+
+<a href="https://youtube.com/@biezkaviru" target="_blank">
+YouTube
+</a>
+
+<a href="https://x.com/biezkaviru" target="_blank">
+X / Twitter
+</a>
+
+<a href="https://wa.me/254700000000" target="_blank">
+WhatsApp
+</a>
+
+</div>
+
+<p class="copyright">
+© 2026 BIEZ KAVIRU ENTERTAINMENT. All Rights Reserved.
+</p>
+
+</footer>
+
+<style>
+
+.social-footer{
+
+margin-top:80px;
+
+padding:45px 20px;
+
+text-align:center;
+
+background:
+linear-gradient(
+180deg,
+rgba(0,0,0,0.55),
+rgba(0,0,0,0.82)
+);
+
+backdrop-filter:blur(12px);
+
+border-top:
+1px solid rgba(0,255,204,0.15);
+}
+
+.social-footer h3{
+
+font-size:30px;
+
+margin-bottom:25px;
+
+color:#00ffcc;
+
+letter-spacing:2px;
+
+text-shadow:
+0 0 10px rgba(0,255,204,0.45);
+}
+
+.social-links{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:18px;
+
+margin-bottom:25px;
+}
+
+.social-links a{
+
+padding:14px 22px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+color:white;
+
+background:
+rgba(0,255,204,0.08);
+
+border:
+1px solid rgba(0,255,204,0.22);
+
+transition:0.3s;
+
+box-shadow:
+0 0 15px rgba(0,255,204,0.08);
+}
+
+.social-links a:hover{
+
+transform:translateY(-4px);
+
+background:
+rgba(0,255,204,0.18);
+
+box-shadow:
+0 0 22px rgba(0,255,204,0.22);
+}
+
+.copyright{
+
+color:#aaa;
+
+font-size:14px;
+
+margin-top:20px;
+}
+
+@media(max-width:768px){
+
+.social-links{
+
+flex-direction:column;
+
+align-items:center;
+}
+
+.social-links a{
+
+width:100%;
+max-width:300px;
+}
+
+}
+
+</style>
+
 </body>
 </html>
     ''', audios=audios)
