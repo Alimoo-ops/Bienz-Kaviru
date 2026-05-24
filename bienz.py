@@ -14,14 +14,14 @@ app.secret_key = "SUPER_SECRET_KEY_CHANGE_THIS"
 # CONFIG
 # =========================
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATABASE = os.path.join(BASE_DIR, "bienz_audio_store.db")
+DATABASE = os.path.join(BASE_DIR, "biez_audio_store.db")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads_protected")
 COVER_FOLDER = os.path.join(BASE_DIR, "static", "covers")
 ALLOWED_AUDIO = {"mp3", "wav"}
 ALLOWED_IMAGES = {"png", "jpg", "jpeg", "webp"}
 
 ADMIN_USERNAME = "KAVIRU"
-ADMIN_PASSWORD = "BIENZ2005"
+ADMIN_PASSWORD = "BIEZ2005"
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(COVER_FOLDER, exist_ok=True)
@@ -144,7 +144,7 @@ def home():
 <!DOCTYPE html>
 <html>
 <head>
-<title>BIENZ AUDIO STORE</title>
+<title>BIEZ AUDIO STORE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
 
@@ -644,7 +644,7 @@ text-shadow:
 <img src="/static/banana.png" class="splash-logo">
 
 <h1 class="splash-title">
-BIENZ AUDIO STORE
+BIEZ AUDIO STORE
 </h1>
 
 <div class="loader"></div>
@@ -654,7 +654,7 @@ BIENZ AUDIO STORE
 <div id="main-content" style="display:none;">
 <header>
 <div class="logo neon-logo">
-BIENZ AUDIO STORE
+BIEZ AUDIO STORE
 </div>
 <div class="nav neon-nav">
 <a href="/">Home</a>
@@ -747,7 +747,7 @@ def register():
 <!DOCTYPE html>
 <html>
 <head>
-<title>Register | BIENZ AUDIO STORE</title>
+<title>Register | BIEZ AUDIO STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -885,7 +885,7 @@ text-decoration:none;
 
 <div class="register-box">
 
-<div class="logo">BIENZ AUDIO</div>
+<div class="logo">BIEZ AUDIO</div>
 
 <div class="subtitle">
 Create your free account
@@ -943,7 +943,7 @@ def login():
 <!DOCTYPE html>
 <html>
 <head>
-<title>User Login | BIENZ AUDIO STORE</title>
+<title>User Login | BIEZ AUDIO STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1081,7 +1081,7 @@ text-decoration:none;
 
 <div class="login-box">
 
-<div class="logo">BIENZ AUDIO</div>
+<div class="logo">BIEZ AUDIO</div>
 
 <div class="subtitle">
 Secure User Access Portal
@@ -1128,10 +1128,10 @@ def dashboard():
     conn = get_db()
 
     purchases = conn.execute('''
-    SELECT purchases.*, audios.title
-    FROM purchases
-    JOIN audios ON purchases.audio_id = audios.id
-    WHERE purchases.user_id=?
+        SELECT purchases.*, audios.title
+        FROM purchases
+        JOIN audios ON purchases.audio_id = audios.id
+        WHERE purchases.user_id=?
     ''', (session['user_id'],)).fetchall()
 
     conn.close()
@@ -1143,7 +1143,6 @@ def dashboard():
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
@@ -1174,7 +1173,6 @@ margin-bottom:25px;
 
 .header h1{
 color:#00ffcc;
-text-shadow:0 0 10px rgba(0,255,204,0.4);
 }
 
 .card{
@@ -1189,7 +1187,6 @@ transition:0.3s;
 
 .card:hover{
 transform:translateY(-5px);
-box-shadow:0 0 25px rgba(0,255,204,0.2);
 }
 
 .btn{
@@ -1201,11 +1198,6 @@ border-radius:12px;
 text-decoration:none;
 font-weight:bold;
 margin-right:8px;
-transition:0.3s;
-}
-
-.btn:hover{
-transform:scale(1.05);
 }
 
 .section-title{
@@ -1213,7 +1205,6 @@ color:#00ffcc;
 font-size:24px;
 margin:20px 0 10px;
 }
-
 </style>
 </head>
 
@@ -1242,6 +1233,7 @@ margin:20px 0 10px;
 
 </body>
 </html>
+''', purchases=purchases)
 
 
 # =========================
@@ -1445,7 +1437,7 @@ def pay(audio_id):
     conn = get_db()
     audio = conn.execute("SELECT * FROM audios WHERE id=?", (audio_id,)).fetchone()
 
-    receipt = "BIENZ" + secrets.token_hex(4).upper()
+    receipt = "BIEZ" + secrets.token_hex(4).upper()
 
     conn.execute('''
     INSERT INTO purchases (
@@ -1572,7 +1564,7 @@ def admin_login():
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Login | BIENZ AUDIO STORE</title>
+<title>Admin Login | BIEZ AUDIO STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1750,7 +1742,7 @@ font-size:30px;
 <div class="login-box">
 
 <div class="logo">
-BIENZ ADMIN
+BIEZ ADMIN
 </div>
 
 <div class="subtitle">
@@ -1780,7 +1772,7 @@ ACCESS DASHBOARD
 </form>
 
 <div class="footer-text">
-BIENZ AUDIO STORE © 2026
+BIEZ AUDIO STORE © 2026
 </div>
 
 </div>
@@ -1815,7 +1807,7 @@ def admin_dashboard():
 <html>
 <head>
 
-<title>BIENZ ADMIN DASHBOARD</title>
+<title>BIEZ ADMIN DASHBOARD</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -2078,7 +2070,7 @@ font-size:32px;
 <div class="topbar">
 
 <div class="logo">
-BIENZ ADMIN
+BIEZ ADMIN
 </div>
 
 <a class="upload-btn" href="/admin/upload">
