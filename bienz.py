@@ -1664,7 +1664,7 @@ transition:0.3s;
 
 /* 🔥 placeholder fix */
 input::placeholder{
-    font-size:20px;
+    font-size:24px;
     color:rgba(255,255,255,0.75);
     opacity:1;
 }
