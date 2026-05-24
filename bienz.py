@@ -1183,33 +1183,161 @@ def audio_details(audio_id):
         paid = user_paid(session['user_id'], audio_id)
 
     return render_template_string('''
-    <body style="
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+margin:0;
+padding:40px;
+font-family:Arial;
+color:white;
+
 background:url('/static/backgrounds/login_bg.jpg');
 background-size:cover;
 background-position:center;
 background-attachment:fixed;
-background-repeat:no-repeat;
+}
+
+/* MAIN CARD */
+.audio-container{
+max-width:700px;
+margin:auto;
+
+background:rgba(0,0,0,0.55);
+backdrop-filter:blur(12px);
+
+border:1px solid rgba(0,255,204,0.2);
+border-radius:20px;
+
+padding:25px;
+
+box-shadow:0 0 25px rgba(0,255,204,0.12);
+}
+
+/* IMAGE */
+.audio-container img{
+width:100%;
+max-width:320px;
+border-radius:15px;
+border:1px solid rgba(0,255,204,0.2);
+}
+
+/* TEXT */
+h1{
+color:#fff;
+margin-top:15px;
+}
+
+p{
+color:#ccc;
+}
+
+/* LOCK BOX */
+.lock-box{
+margin-top:20px;
+padding:20px;
+
+border-radius:16px;
+border:1px solid rgba(0,255,204,0.25);
+
+background:rgba(0,0,0,0.4);
+box-shadow:0 0 20px rgba(0,255,204,0.12);
+}
+
+/* TITLE (UNCHANGED TEXT) */
+.lock-box h3{
+color:#00ffcc;
+margin-bottom:12px;
+text-shadow:0 0 10px rgba(0,255,204,0.4);
+}
+
+/* INPUT */
+.lock-box input{
+width:100%;
+padding:14px;
+margin-bottom:12px;
+
+border-radius:10px;
+border:1px solid rgba(0,255,204,0.25);
+
+background:#111;
 color:white;
-font-family:Arial;
-padding:40px;
-">
-    <img src="/{{ audio['cover_image'] }}" width="300">
+
+font-size:15px;
+outline:none;
+}
+
+/* BUTTON */
+.lock-box button{
+width:100%;
+padding:14px;
+
+border:none;
+border-radius:12px;
+
+background:linear-gradient(45deg,#00ffcc,#00ccff);
+color:black;
+
+font-weight:bold;
+cursor:pointer;
+
+box-shadow:0 0 18px rgba(0,255,204,0.35);
+}
+
+a{
+color:#00ffcc;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="audio-container">
+
+    <img src="/{{ audio['cover_image'] }}">
+
     <h1>{{ audio['title'] }}</h1>
+
     <p>Genre: {{ audio['genre'] }}</p>
     <p>Price: KES {{ audio['price'] }}</p>
 
     {% if paid %}
         <a href="/stream/{{ audio['id'] }}">Listen Now</a><br><br>
         <a href="/download/{{ audio['id'] }}">Download</a>
+
     {% else %}
-        <h3>Locked Premium Audio</h3>
-        <form method="POST" action="/pay/{{ audio['id'] }}">
-        <input name="phone" placeholder="2547XXXXXXXX" required>
-        <button>Pay with M-Pesa</button>
-        </form>
+
+        <div class="lock-box">
+
+            <h3>Locked Premium Audio</h3>
+
+            <form method="POST" action="/pay/{{ audio['id'] }}">
+
+                <input name="phone"
+                       placeholder="2547XXXXXXXX"
+                       required>
+
+                <button type="submit">
+                    Pay with M-Pesa
+                </button>
+
+            </form>
+
+        </div>
+
     {% endif %}
-    </body>
-    ''', audio=audio, paid=paid)
+
+</div>
+
+</body>
+</html>
+''', audio=audio, paid=paid)
 
 
 # =========================
@@ -1430,9 +1558,8 @@ letter-spacing:1px;
 }}
 
 input{
-
 width:100%;
-padding:24px;
+padding:22px 20px;
 
 margin-bottom:18px;
 
@@ -1442,14 +1569,26 @@ outline:none;
 border-radius:14px;
 
 background:#111;
-
 color:white;
 
-font-size:19px;
+font-size:20px;   /* 🔥 bigger typing text */
 
 border:1px solid rgba(255,255,255,0.08);
 
 transition:0.3s;
+}
+
+/* 🔥 placeholder fix */
+input::placeholder{
+font-size:18px;
+color:rgba(255,255,255,0.6);
+letter-spacing:0.5px;
+}
+
+input:focus{
+border:1px solid #00ff99;
+
+box-shadow:0 0 12px rgba(0,255,153,0.35);
 }
 
 input:focus{
