@@ -553,30 +553,22 @@ height:55px;
 }
 
 .neon-heading{
+    font-family: 'Cinzel', serif;
+    font-size:48px;
+    margin-top:45vh;
+    margin-bottom:35px;
+    font-weight:900;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    text-align:center;
+    color:#00ffcc;
 
-font-family: 'Cinzel', serif;
+    text-shadow:
+    0 0 10px #00ffcc,
+    0 0 25px #00ffcc,
+    0 0 45px rgba(0,255,204,0.8);
 
-font-size:48px;
-
-margin-top:45vh;
-
-margin-bottom:35px;
-
-font-weight:900;
-
-letter-spacing:4px;
-
-text-transform:uppercase;
-
-text-align:center;
-
-color:#f5f5f5;
-
-text-shadow:
-0 3px 10px rgba(0,0,0,0.95),
-0 6px 25px rgba(0,0,0,0.85);
-
-position:relative;
+    animation: danceText 1.8s infinite ease-in-out;
 }
 
 .neon-heading::after{
@@ -970,6 +962,33 @@ width:100%;
 max-width:300px;
 }
 
+}
+
+@keyframes danceText{
+    0%{
+        transform: translateY(0) scale(1) rotate(0deg);
+        text-shadow: 0 0 10px #00ffcc;
+    }
+
+    25%{
+        transform: translateY(-8px) scale(1.03) rotate(-1deg);
+        text-shadow: 0 0 20px #00ffcc;
+    }
+
+    50%{
+        transform: translateY(0) scale(1.05) rotate(1deg);
+        text-shadow: 0 0 35px #00ffcc, 0 0 60px #00ffcc;
+    }
+
+    75%{
+        transform: translateY(-6px) scale(1.03) rotate(-1deg);
+        text-shadow: 0 0 20px #00ffcc;
+    }
+
+    100%{
+        transform: translateY(0) scale(1) rotate(0deg);
+        text-shadow: 0 0 10px #00ffcc;
+    }
 }
 
 </style>
