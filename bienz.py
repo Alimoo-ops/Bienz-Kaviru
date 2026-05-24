@@ -553,21 +553,54 @@ height:55px;
 }
 
 .neon-heading{
-    font-family: 'Cinzel', serif;
-    font-size:48px;
-    margin-top:45vh;
-    margin-bottom:35px;
+    font-family:'Cinzel', serif;
+
+    font-size:clamp(28px, 6vw, 48px);
+
+    width:100%;
+    max-width:95%;
+
+    margin:40px auto 30px auto;
+
+    padding:0 12px;
+
     font-weight:900;
-    letter-spacing:4px;
+
+    letter-spacing:2px;
+
+    line-height:1.25;
+
     text-transform:uppercase;
+
     text-align:center;
-    color:#eafffa;
+
+    color:#f5f5f5;
+
+    word-wrap:break-word;
+
+    overflow-wrap:break-word;
 
     text-shadow:
     0 2px 8px rgba(0,0,0,0.75),
     0 0 12px rgba(255,255,255,0.08);
 
-    animation: danceText 1.8s infinite ease-in-out;
+    animation:danceText 3.5s ease-in-out infinite;
+}
+
+@media(max-width:768px){
+
+.neon-heading{
+
+font-size:32px;
+
+letter-spacing:1px;
+
+padding:0 10px;
+
+margin-top:25px;
+
+}
+
 }
 
 .neon-heading::after{
