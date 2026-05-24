@@ -1598,18 +1598,57 @@ overflow-x:hidden;
 
 .login-box{
 width:100%;
-max-width:720px;
-padding:60px 50px;
-background:rgba(20,20,20,0.82);
+max-width:650px;
+padding:50px 35px;
+background:rgba(20,20,20,0.85);
 backdrop-filter:blur(14px);
 border-radius:25px;
-border:1px solid rgba(0,255,153,0.25);
-box-shadow:0 0 30px rgba(0,255,153,0.15),
+border:1px solid rgba(0,255,204,0.25);
+box-shadow:0 0 30px rgba(0,255,204,0.12),
 0 0 80px rgba(0,0,0,0.7);
 text-align:center;
+margin:auto;
+}
+
+.subtitle{
+color:#ddd;
+margin-bottom:25px;
+font-size:16px;
+}
+
+.form-container form{
 display:flex;
 flex-direction:column;
 gap:18px;
+}
+
+input{
+width:100%;
+padding:18px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#111;
+color:white;
+font-size:16px;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+input::placeholder{
+font-size:16px;
+color:rgba(255,255,255,0.75);
+}
+
+button{
+width:100%;
+padding:18px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#00ffcc,#00ccff);
+color:black;
+font-weight:bold;
+font-size:18px;
+cursor:pointer;
 }
 
 form{
