@@ -407,7 +407,7 @@ transition:0.8s ease;
 width:170px;
 
 animation:
-logoFloat 3s ease-in-out infinite,
+logoFloat 2s ease-in-out infinite,
 logoGlow 2s infinite alternate;
 }
 
@@ -640,8 +640,6 @@ text-shadow:
 </head>
 
 <div id="splash-screen">
-
-<img src="/static/banana.png" class="splash-logo">
 
 <h1 class="splash-title">
 BIEZ AUDIO STORE
@@ -2261,34 +2259,217 @@ def upload_audio():
         return redirect('/admin/dashboard')
 
     return render_template_string('''
-    <body style="
-background:url('/static/backgrounds/login_bg.jpg');
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Upload Audio | BIEZ ADMIN</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+
+min-height:100vh;
+
+background:
+linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
+url('/static/backgrounds/admin_bg.jpg');
+
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
 background-repeat:no-repeat;
+background-attachment:fixed;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+
 color:white;
-font-family:Arial;
-padding:40px;
-">
-    <h1>Upload Audio</h1>
+}
 
-    <form method="POST" enctype="multipart/form-data">
-    <input name="title" placeholder="Title" required><br><br>
-    <input name="genre" placeholder="Genre" required><br><br>
-    <input name="duration" placeholder="Duration e.g 3:45" required><br><br>
-    <input name="price" placeholder="Price" required><br><br>
+.upload-box{
 
-    <label>Upload Audio</label><br>
-    <input type="file" name="audio" required><br><br>
+width:100%;
+max-width:750px;
 
-    <label>Upload Cover</label><br>
-    <input type="file" name="cover" required><br><br>
+background:rgba(18,18,18,0.82);
 
-    <button>Upload Audio</button>
-    </form>
-    </body>
-    ''')
+backdrop-filter:blur(15px);
+
+border-radius:28px;
+
+padding:45px;
+
+border:1px solid rgba(0,255,153,0.2);
+
+box-shadow:
+0 0 30px rgba(0,255,153,0.12),
+0 0 90px rgba(0,0,0,0.65);
+}
+
+.logo{
+
+font-size:42px;
+font-weight:900;
+
+color:#00ff99;
+
+margin-bottom:12px;
+
+text-align:center;
+
+letter-spacing:3px;
+
+text-shadow:
+0 0 10px rgba(0,255,153,0.7),
+0 0 30px rgba(0,255,153,0.35);
+}
+
+.subtitle{
+
+text-align:center;
+
+color:#cccccc;
+
+margin-bottom:35px;
+
+font-size:16px;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+input{
+
+width:100%;
+
+padding:18px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+background:#111;
+
+color:white;
+
+font-size:17px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:0.3s;
+}
+
+input:focus{
+
+border:1px solid #00ff99;
+
+box-shadow:
+0 0 15px rgba(0,255,153,0.3);
+}
+
+input::placeholder{
+color:rgba(255,255,255,0.7);
+}
+
+label{
+
+font-size:15px;
+
+color:#00ff99;
+
+margin-bottom:-8px;
+}
+
+button{
+
+width:100%;
+
+padding:20px;
+
+border:none;
+
+border-radius:15px;
+
+background:linear-gradient(45deg,#00ff99,#00cc77);
+
+color:black;
+
+font-size:20px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+
+button:hover{
+
+transform:scale(1.02);
+
+box-shadow:
+0 0 25px rgba(0,255,153,0.35);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="upload-box">
+
+<div class="logo">
+BIEZ ADMIN
+</div>
+
+<div class="subtitle">
+Upload Premium Audio Content
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+
+<input name="title" placeholder="Audio Title" required>
+
+<input name="genre" placeholder="Genre" required>
+
+<input name="duration" placeholder="Duration e.g 3:45" required>
+
+<input name="price" placeholder="Price (KES)" required>
+
+<label>Upload Audio File</label>
+<input type="file" name="audio" required>
+
+<label>Upload Cover Image</label>
+<input type="file" name="cover" required>
+
+<button type="submit">
+UPLOAD AUDIO
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
+''')
 
 
 # =========================
