@@ -1195,7 +1195,6 @@ margin:0;
 padding:40px;
 font-family:Arial;
 color:white;
-
 background:url('/static/backgrounds/login_bg.jpg');
 background-size:cover;
 background-position:center;
@@ -1206,15 +1205,11 @@ background-attachment:fixed;
 .audio-container{
 max-width:700px;
 margin:auto;
-
 background:rgba(0,0,0,0.55);
 backdrop-filter:blur(12px);
-
 border:1px solid rgba(0,255,204,0.2);
 border-radius:20px;
-
 padding:25px;
-
 box-shadow:0 0 25px rgba(0,255,204,0.12);
 }
 
@@ -1240,10 +1235,8 @@ color:#ccc;
 .lock-box{
 margin-top:20px;
 padding:20px;
-
 border-radius:16px;
 border:1px solid rgba(0,255,204,0.25);
-
 background:rgba(0,0,0,0.4);
 box-shadow:0 0 20px rgba(0,255,204,0.12);
 }
@@ -1260,13 +1253,10 @@ text-shadow:0 0 10px rgba(0,255,204,0.4);
 width:100%;
 padding:14px;
 margin-bottom:12px;
-
 border-radius:10px;
 border:1px solid rgba(0,255,204,0.25);
-
 background:#111;
 color:white;
-
 font-size:15px;
 outline:none;
 }
@@ -1275,22 +1265,42 @@ outline:none;
 .lock-box button{
 width:100%;
 padding:14px;
-
 border:none;
 border-radius:12px;
-
 background:linear-gradient(45deg,#00ffcc,#00ccff);
 color:black;
-
 font-weight:bold;
 cursor:pointer;
-
 box-shadow:0 0 18px rgba(0,255,204,0.35);
+transition:0.3s;
 }
 
-a{
+.lock-box button:hover{
+transform:scale(1.03);
+}
+
+/* FIX: ensure links are clickable and not blocked */
+.action-links{
+margin-top:20px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.action-links a{
+display:inline-block;
+padding:12px 16px;
+border-radius:12px;
+background:rgba(0,255,204,0.12);
+border:1px solid rgba(0,255,204,0.25);
 color:#00ffcc;
 text-decoration:none;
+font-weight:bold;
+text-align:center;
+}
+
+.action-links a:hover{
+background:rgba(0,255,204,0.2);
 }
 
 </style>
@@ -1308,8 +1318,11 @@ text-decoration:none;
     <p>Price: KES {{ audio['price'] }}</p>
 
     {% if paid %}
-        <a href="/stream/{{ audio['id'] }}">Listen Now</a><br><br>
-        <a href="/download/{{ audio['id'] }}">Download</a>
+
+        <div class="action-links">
+            <a href="/stream/{{ audio['id'] }}">Listen Now</a>
+            <a href="/download/{{ audio['id'] }}">Download</a>
+        </div>
 
     {% else %}
 
