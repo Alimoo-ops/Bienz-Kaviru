@@ -147,6 +147,7 @@ def home():
 <title>BIEZ KAVIRU MUSIC STORE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -747,8 +748,8 @@ BIEZ KAVIRU MUSIC STORE
 </header>
 
 <div class="container">
-<h2 class="neon-heading">
-🔥 Welcome to Kaviru Entertainment 🔥
+<h2 class="cinema-heading">
+WELCOME TO KAVIRU ENTERTAINMENT
 </h2>
 
 <div class="tagline-badges">
@@ -1056,6 +1057,50 @@ box-shadow:
 0 0 80px rgba(0,0,0,0.7);
 
 text-align:center;
+}
+
+.cinema-heading{
+font-family:'Cinzel', serif;
+font-size:52px;
+text-align:center;
+letter-spacing:6px;
+text-transform:uppercase;
+font-weight:800;
+
+color:#ffffff;
+
+margin-top:40px;
+margin-bottom:20px;
+
+text-shadow:
+0 3px 10px rgba(0,0,0,0.9),
+0 0 25px rgba(0,255,204,0.15),
+0 0 60px rgba(0,255,204,0.08);
+
+position:relative;
+
+animation:cinematicFade 1.8s ease-in-out;
+}
+
+@keyframes cinematicFade{
+from{
+opacity:0;
+transform:translateY(25px) scale(0.98);
+}
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+.cinema-heading::after{
+content:"";
+display:block;
+width:180px;
+height:2px;
+margin:18px auto 0;
+background:linear-gradient(90deg,transparent,#00ffcc,transparent);
+box-shadow:0 0 15px rgba(0,255,204,0.4);
 }
 
 .logo{
