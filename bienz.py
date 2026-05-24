@@ -1649,21 +1649,22 @@ outline:none;
 border-radius:14px;
 background:#111;
 color:white;
+
 font-size:22px;
-line-height:1.4;
+font-weight:600;   /* IMPORTANT FIX */
+letter-spacing:0.5px;
 }
 
 input::placeholder{
 font-size:22px;
-color:rgba(255,255,255,0.85);
-font-weight:500;
-}
+color:rgba(255,255,255,0.95);
+font-weight:700;
+opacity:1;
 
-/* 🔥 placeholder fix */
-input::placeholder{
-    font-size:24px;
-    color:rgba(255,255,255,0.75);
-    opacity:1;
+/* key fix for thin look */
+letter-spacing:0.5px;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale;
 }
 
 input:focus{
