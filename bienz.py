@@ -758,7 +758,7 @@ max-width:900px;
 margin:20px auto 50px auto;
 font-size:20px;
 line-height:1.8;
-color:#f5f5f5;
+color:#dffef7;
 
 text-shadow:
 0 2px 8px rgba(0,0,0,0.9);
@@ -965,30 +965,35 @@ max-width:300px;
 }
 
 @keyframes danceText{
-    0%{
-        transform: translateY(0) scale(1) rotate(0deg);
-        text-shadow: 0 0 10px #00ffcc;
-    }
 
-    25%{
-        transform: translateY(-8px) scale(1.03) rotate(-1deg);
-        text-shadow: 0 0 20px #00ffcc;
+    0%{
+        transform:translateY(0);
+        letter-spacing:4px;
+
+        text-shadow:
+        0 0 8px rgba(0,255,204,0.15),
+        0 0 18px rgba(0,255,204,0.08);
     }
 
     50%{
-        transform: translateY(0) scale(1.05) rotate(1deg);
-        text-shadow: 0 0 35px #00ffcc, 0 0 60px #00ffcc;
-    }
+        transform:translateY(-2px);
+        letter-spacing:5px;
 
-    75%{
-        transform: translateY(-6px) scale(1.03) rotate(-1deg);
-        text-shadow: 0 0 20px #00ffcc;
+        text-shadow:
+        0 0 12px rgba(0,255,204,0.35),
+        0 0 28px rgba(0,255,204,0.18),
+        0 0 60px rgba(0,255,204,0.08);
     }
 
     100%{
-        transform: translateY(0) scale(1) rotate(0deg);
-        text-shadow: 0 0 10px #00ffcc;
+        transform:translateY(0);
+        letter-spacing:4px;
+
+        text-shadow:
+        0 0 8px rgba(0,255,204,0.15),
+        0 0 18px rgba(0,255,204,0.08);
     }
+
 }
 
 </style>
