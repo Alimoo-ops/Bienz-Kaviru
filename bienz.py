@@ -554,6 +554,8 @@ height:55px;
 
 .neon-heading{
 
+font-family: 'Cinzel', serif;
+
 font-size:48px;
 
 margin-top:45vh;
@@ -749,7 +751,7 @@ BIEZ KAVIRU MUSIC STORE
 
 <div class="container">
 <h2 class="neon-heading">
-🔥 Welcome to Kaviru Entertainment 🔥
+Welcome to Kaviru Entertainment
 </h2>
 
 <div class="tagline-badges">
