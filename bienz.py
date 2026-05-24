@@ -144,7 +144,7 @@ def home():
 <!DOCTYPE html>
 <html>
 <head>
-<title>BIEZ AUDIO STORE</title>
+<title>BIEZ KAVIRU MUSIC STORE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
 
@@ -644,7 +644,7 @@ text-shadow:
 <div id="splash-screen">
 
 <h1 class="splash-title">
-BIEZ AUDIO STORE
+BIEZ KAVIRU MUSIC STORE
 </h1>
 
 <div class="loader"></div>
@@ -654,7 +654,7 @@ BIEZ AUDIO STORE
 <div id="main-content" style="display:none;">
 <header>
 <div class="logo neon-logo">
-BIEZ AUDIO STORE
+BIEZ KAVIRU MUSIC STORE
 </div>
 <div class="nav neon-nav">
 <a href="/">Home</a>
@@ -747,7 +747,7 @@ def register():
 <!DOCTYPE html>
 <html>
 <head>
-<title>Register | BIEZ AUDIO STORE</title>
+<title>Register | BIEZ KAVIRU MUSIC STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -943,7 +943,7 @@ def login():
 <!DOCTYPE html>
 <html>
 <head>
-<title>User Login | BIEZ AUDIO STORE</title>
+<title>User Login | BIEZ KAVIRU MUSIC STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1564,7 +1564,7 @@ def admin_login():
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Login | BIEZ AUDIO STORE</title>
+<title>Admin Login | BIEZ KAVIRU MUSIC STORE</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1813,7 +1813,7 @@ ACCESS DASHBOARD
 </form>
 
 <div class="footer-text">
-BIEZ AUDIO STORE © 2026
+BIEZ KAVIRU MUSIC STORE © 2026
 </div>
 
 </div>
