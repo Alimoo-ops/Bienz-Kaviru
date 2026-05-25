@@ -3061,7 +3061,7 @@ def mpesa_callback():
     return jsonify({
         "ResultCode": 0,
         "ResultDesc": "Accepted"
-    }))
+    })
 
 
 # =========================
