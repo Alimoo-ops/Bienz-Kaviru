@@ -26,6 +26,13 @@ app.secret_key = os.environ.get("SECRET_KEY")
 # =========================
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads_protected")
 COVER_FOLDER = os.path.join(BASE_DIR, "static", "covers")
 ALLOWED_AUDIO = {"mp3", "wav"}
@@ -1936,39 +1943,6 @@ def pay(audio_id):
     flash("Payment successful. Audio unlocked.")
 
     return redirect(f'/audio/{audio_id}')
-
-
-# =========================
-# STREAM PROTECTED AUDIO
-# =========================
-@app.route('/stream/<int:audio_id>')
-def stream_audio(audio_id):
-    if 'user_id' not in session:
-        return "Access Denied"
-
-    purchase = user_paid(session['user_id'], audio_id)
-
-    if not purchase:
-        return "Access Denied"
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    cur.execute(
-        "SELECT * FROM audios WHERE id=%s",
-        (audio_id,)
-    )
-
-    audio = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    if not audio:
-        return "Audio not found"
-
-        return redirect(audio['filename'])
-
 
 # =========================
 # DOWNLOAD PROTECTED AUDIO
