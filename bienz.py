@@ -1,27 +1,38 @@
 import os
-import sqlite3
+import psycopg2
+from psycopg2.extras import RealDictCursor
 import json
 import secrets
 from datetime import datetime
 from flask import Flask, request, redirect, url_for, session, flash, send_file, abort, jsonify, render_template_string
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
 
 app = Flask(__name__)
-app.secret_key = "SUPER_SECRET_KEY_CHANGE_THIS"
+app.secret_key = os.environ.get("SECRET_KEY")
 
 # =========================
 # CONFIG
 # =========================
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATABASE = os.path.join(BASE_DIR, "biez_audio_store.db")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads_protected")
 COVER_FOLDER = os.path.join(BASE_DIR, "static", "covers")
 ALLOWED_AUDIO = {"mp3", "wav"}
 ALLOWED_IMAGES = {"png", "jpg", "jpeg", "webp"}
 
-ADMIN_USERNAME = "KAVIRU"
-ADMIN_PASSWORD = "BIEZ2005"
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(COVER_FOLDER, exist_ok=True)
@@ -31,8 +42,10 @@ os.makedirs("static", exist_ok=True)
 # DATABASE
 # =========================
 def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(
+        DATABASE_URL,
+        cursor_factory=RealDictCursor
+    )
     return conn
 
 
@@ -42,7 +55,7 @@ def init_db():
 
     cur.execute('''
     CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         username TEXT UNIQUE,
         email TEXT,
         phone TEXT,
@@ -52,7 +65,7 @@ def init_db():
 
     cur.execute('''
     CREATE TABLE IF NOT EXISTS audios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         title TEXT,
         filename TEXT,
         cover_image TEXT,
@@ -66,7 +79,7 @@ def init_db():
 
     cur.execute('''
     CREATE TABLE IF NOT EXISTS purchases (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         user_id INTEGER,
         audio_id INTEGER,
         paid INTEGER,
@@ -79,7 +92,7 @@ def init_db():
 
     cur.execute('''
     CREATE TABLE IF NOT EXISTS payment_callbacks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         mpesa_receipt TEXT,
         phone TEXT,
         amount REAL,
@@ -110,20 +123,35 @@ def current_user():
         return None
 
     conn = get_db()
-    user = conn.execute("SELECT * FROM users WHERE id=?", (session['user_id'],)).fetchone()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM users WHERE id=%s",
+        (session['user_id'],)
+    )
+
+    user = cur.fetchone()
+
+    cur.close()
     conn.close()
+
     return user
 
 
 def user_paid(user_id, audio_id):
     conn = get_db()
+    cur = conn.cursor()
 
-    purchase = conn.execute(
-        "SELECT * FROM purchases WHERE user_id=? AND audio_id=? AND paid=1",
+    cur.execute(
+        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
         (user_id, audio_id)
-    ).fetchone()
+    )
 
+    purchase = cur.fetchone()
+
+    cur.close()
     conn.close()
+
     return purchase
 
 
@@ -136,8 +164,17 @@ def is_admin():
 # =========================
 @app.route('/')
 def home():
+
     conn = get_db()
-    audios = conn.execute("SELECT * FROM audios WHERE active=1 ORDER BY id DESC").fetchall()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM audios WHERE active=1 ORDER BY id DESC"
+    )
+
+    audios = cur.fetchall()
+
+    cur.close()
     conn.close()
 
     return render_template_string('''
@@ -147,6 +184,12 @@ def home():
 <title>BIEZ KAVIRU MUSIC STORE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Buy premium audios securely with M-Pesa">
+<meta property="og:title" content="BIEZ KAVIRU MUSIC STORE">
+<meta property="og:description" content="Premium audio marketplace powered by Kaviru Entertainment">
+<meta property="og:image" content="/static/backgrounds/main_bg.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://biezkaviru.onrender.com">
+<link rel="icon" href="/static/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -811,7 +854,7 @@ Discover premium audio content crafted to inspire, entertain, and connect you to
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
-<img src="/{{ audio['cover_image'] }}">
+<img src="{{ audio['cover_image'] }}">
 <div class="card-content">
 <h3>{{ audio['title'] }}</h3>
 <p>Genre: {{ audio['genre'] }}</p>
@@ -1047,19 +1090,26 @@ def register():
         password = generate_password_hash(request.form['password'])
 
         conn = get_db()
+        cur = conn.cursor()
 
         try:
-            conn.execute(
-                "INSERT INTO users (username,email,phone,password_hash) VALUES (?,?,?,?)",
+            cur.execute(
+                "INSERT INTO users (username,email,phone,password_hash) VALUES (%s,%s,%s,%s)",
                 (username, email, phone, password)
             )
+
             conn.commit()
+
             flash("Registration successful")
             return redirect('/login')
-        except:
+
+        except Exception as e:
+            conn.rollback()
             flash("Username already exists")
 
-        conn.close()
+        finally:
+            cur.close()
+            conn.close()
 
     return render_template_string('''
 <!DOCTYPE html>
@@ -1284,22 +1334,41 @@ Already have an account? <a href="/login">Login</a>
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+
         username = request.form['username']
         password = request.form['password']
 
         conn = get_db()
-        user = conn.execute(
-            "SELECT * FROM users WHERE username=?",
-            (username,)
-        ).fetchone()
-        conn.close()
+        cur = conn.cursor()
 
-        if user and check_password_hash(user['password_hash'], password):
-            session['user_id'] = user['id']
-            session['username'] = user['username']
-            return redirect('/dashboard')
+        try:
 
-        flash("Invalid credentials")
+            cur.execute(
+                "SELECT * FROM users WHERE username=%s",
+                (username,)
+            )
+
+            user = cur.fetchone()
+
+            if user and check_password_hash(user['password_hash'], password):
+
+                session['user_id'] = user['id']
+                session['username'] = user['username']
+
+                flash("Login successful")
+
+                return redirect('/dashboard')
+
+            flash("Invalid credentials")
+
+        except Exception as e:
+
+            flash("Login error")
+
+        finally:
+
+            cur.close()
+            conn.close()
 
     return render_template_string('''
 <!DOCTYPE html>
@@ -1488,14 +1557,18 @@ def dashboard():
         return redirect('/login')
 
     conn = get_db()
+    cur = conn.cursor()
 
-    purchases = conn.execute('''
+    cur.execute('''
         SELECT purchases.*, audios.title
         FROM purchases
         JOIN audios ON purchases.audio_id = audios.id
-        WHERE purchases.user_id=?
-    ''', (session['user_id'],)).fetchall()
+        WHERE purchases.user_id=%s
+    ''', (session['user_id'],))
 
+    purchases = cur.fetchall()
+
+    cur.close()
     conn.close()
 
     return render_template_string('''
@@ -1603,8 +1676,18 @@ margin:20px 0 10px;
 # =========================
 @app.route('/audio/<int:audio_id>')
 def audio_details(audio_id):
+
     conn = get_db()
-    audio = conn.execute("SELECT * FROM audios WHERE id=?", (audio_id,)).fetchone()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM audios WHERE id=%s",
+        (audio_id,)
+    )
+
+    audio = cur.fetchone()
+
+    cur.close()
     conn.close()
 
     if not audio:
@@ -1616,6 +1699,7 @@ def audio_details(audio_id):
         paid = user_paid(session['user_id'], audio_id)
 
     return render_template_string('''
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -1743,7 +1827,7 @@ background:rgba(0,255,204,0.2);
 
 <div class="audio-container">
 
-    <img src="/{{ audio['cover_image'] }}">
+    <img src="{{ audio['cover_image'] }}">
 
     <h1>{{ audio['title'] }}</h1>
 
@@ -1797,11 +1881,18 @@ def pay(audio_id):
     phone = request.form['phone']
 
     conn = get_db()
-    audio = conn.execute("SELECT * FROM audios WHERE id=?", (audio_id,)).fetchone()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM audios WHERE id=%s",
+        (audio_id,)
+    )
+
+    audio = cur.fetchone()
 
     receipt = "BIEZ" + secrets.token_hex(4).upper()
 
-    conn.execute('''
+    cur.execute('''
     INSERT INTO purchases (
         user_id,
         audio_id,
@@ -1810,7 +1901,7 @@ def pay(audio_id):
         receipt_number,
         downloads_remaining,
         purchase_date
-    ) VALUES (?,?,?,?,?,?,?)
+    ) VALUES (%s,%s,%s,%s,%s,%s,%s)
     ''', (
         session['user_id'],
         audio_id,
@@ -1821,14 +1912,14 @@ def pay(audio_id):
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ))
 
-    conn.execute('''
+    cur.execute('''
     INSERT INTO payment_callbacks (
         mpesa_receipt,
         phone,
         amount,
         status,
         raw_callback_json
-    ) VALUES (?,?,?,?,?)
+    ) VALUES (%s,%s,%s,%s,%s)
     ''', (
         receipt,
         phone,
@@ -1838,6 +1929,8 @@ def pay(audio_id):
     ))
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
     flash("Payment successful. Audio unlocked.")
@@ -1859,15 +1952,22 @@ def stream_audio(audio_id):
         return "Access Denied"
 
     conn = get_db()
-    audio = conn.execute("SELECT * FROM audios WHERE id=?", (audio_id,)).fetchone()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM audios WHERE id=%s",
+        (audio_id,)
+    )
+
+    audio = cur.fetchone()
+
+    cur.close()
     conn.close()
 
-    file_path = os.path.join(UPLOAD_FOLDER, audio['filename'])
+    if not audio:
+        return "Audio not found"
 
-    if not os.path.exists(file_path):
-        return "Audio file missing"
-
-    return send_file(file_path)
+        return redirect(audio['filename'])
 
 
 # =========================
@@ -1879,34 +1979,81 @@ def download_audio(audio_id):
         return "Access Denied"
 
     conn = get_db()
+    cur = conn.cursor()
 
-    purchase = conn.execute(
-        "SELECT * FROM purchases WHERE user_id=? AND audio_id=? AND paid=1",
+    cur.execute(
+        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
         (session['user_id'], audio_id)
-    ).fetchone()
+    )
+
+    purchase = cur.fetchone()
 
     if not purchase:
+        cur.close()
         conn.close()
         return "Access Denied"
 
     if purchase['downloads_remaining'] <= 0:
+        cur.close()
         conn.close()
         return "Download limit reached"
 
-    audio = conn.execute("SELECT * FROM audios WHERE id=?", (audio_id,)).fetchone()
+    cur.execute(
+        "SELECT * FROM audios WHERE id=%s",
+        (audio_id,)
+    )
 
-    conn.execute(
-        "UPDATE purchases SET downloads_remaining = downloads_remaining - 1 WHERE id=?",
+    audio = cur.fetchone()
+
+    cur.execute(
+        "UPDATE purchases SET downloads_remaining = downloads_remaining - 1 WHERE id=%s",
         (purchase['id'],)
     )
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
     file_path = os.path.join(UPLOAD_FOLDER, audio['filename'])
 
     return send_file(file_path, as_attachment=True)
 
+# =========================
+# STREAM AUDIO
+# =========================
+@app.route('/stream/<int:audio_id>')
+def stream_audio(audio_id):
+
+    if 'user_id' not in session:
+        return "Access Denied"
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
+        (session['user_id'], audio_id)
+    )
+
+    purchase = cur.fetchone()
+
+    if not purchase:
+        cur.close()
+        conn.close()
+        return "Access Denied"
+
+    cur.execute(
+        "SELECT * FROM audios WHERE id=%s",
+        (audio_id,)
+    )
+
+    audio = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return redirect(audio['filename'])
 
 # =========================
 # ADMIN LOGIN
@@ -2194,15 +2341,24 @@ def admin_dashboard():
         return redirect('/admin')
 
     conn = get_db()
+    cur = conn.cursor()
 
-    audios = conn.execute("SELECT * FROM audios ORDER BY id DESC").fetchall()
-    users = conn.execute("SELECT COUNT(*) as total FROM users").fetchone()
-    purchases = conn.execute("SELECT COUNT(*) as total FROM purchases").fetchone()
+    # FETCH DATA
+    cur.execute("SELECT * FROM audios ORDER BY id DESC")
+    audios = cur.fetchall()
 
-    revenue = conn.execute(
-        "SELECT SUM(amount) as total FROM purchases WHERE paid=1"
-    ).fetchone()
+    cur.execute("SELECT COUNT(*) as total FROM users")
+    users = cur.fetchone()
 
+    cur.execute("SELECT COUNT(*) as total FROM purchases")
+    purchases = cur.fetchone()
+
+    cur.execute(
+        "SELECT COALESCE(SUM(amount), 0) as total FROM purchases WHERE paid=1"
+    )
+    revenue = cur.fetchone()
+
+    cur.close()
     conn.close()
 
     return render_template_string('''
@@ -2570,6 +2726,7 @@ def upload_audio():
         return redirect('/admin')
 
     if request.method == 'POST':
+
         title = request.form['title']
         genre = request.form['genre']
         price = request.form['price']
@@ -2578,51 +2735,67 @@ def upload_audio():
         audio_file = request.files['audio']
         cover_file = request.files['cover']
 
+        # VALIDATE FILES
         if not allowed_audio(audio_file.filename):
             return "Invalid audio format"
 
         if not allowed_image(cover_file.filename):
             return "Invalid image format"
 
-        audio_filename = secure_filename(audio_file.filename)
-        cover_filename = secure_filename(cover_file.filename)
+        # UPLOAD AUDIO TO CLOUDINARY
+        audio_upload = cloudinary.uploader.upload(
+            audio_file,
+            resource_type="video",
+            folder="biez_audio_store/audio"
+        )
 
-        audio_path = os.path.join(UPLOAD_FOLDER, audio_filename)
-        cover_path = os.path.join(COVER_FOLDER, cover_filename)
+        # GET AUDIO URL
+        audio_filename = audio_upload["secure_url"]
 
-        audio_file.save(audio_path)
-        cover_file.save(cover_path)
+        # UPLOAD COVER TO CLOUDINARY
+        cover_upload = cloudinary.uploader.upload(
+            cover_file,
+            folder="biez_audio_store/covers"
+        )
 
-        webp_filename = cover_filename
+        # GET COVER URL
+        cover_filename = cover_upload["secure_url"]
 
+        # DATABASE INSERT
         conn = get_db()
+        cur = conn.cursor()
 
-        conn.execute('''
-        INSERT INTO audios (
-            title,
-            filename,
-            cover_image,
-            genre,
-            price,
-            duration,
-            upload_date
-        ) VALUES (?,?,?,?,?,?,?)
+        cur.execute('''
+            INSERT INTO audios (
+                title,
+                filename,
+                cover_image,
+                genre,
+                price,
+                duration,
+                upload_date
+            ) VALUES (%s,%s,%s,%s,%s,%s,%s)
         ''', (
             title,
             audio_filename,
-            f"static/covers/{cover_filename}",
+            cover_filename,
             genre,
-            price,
+            float(price),
             duration,
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ))
 
         conn.commit()
+
+        cur.close()
         conn.close()
+
+        flash("Audio uploaded successfully")
 
         return redirect('/admin/dashboard')
 
     return render_template_string('''
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -2818,7 +2991,7 @@ Upload Premium Audio Content
 <input name="price" placeholder="Price (KES)" required>
 
 <label>Upload Audio File</label>
-<input type="file" name="audio" required>
+<input type="file" name="audio" accept=".mp3,.wav" required>
 
 <label>Upload Cover Image</label>
 <input type="file" name="cover" required>
@@ -2844,7 +3017,7 @@ def robots():
     return """
 User-agent: *
 Allow: /
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://biezkaviru.onrender.com/sitemap.xml
 """, 200, {'Content-Type': 'text/plain'}
 
 
@@ -2853,18 +3026,27 @@ Sitemap: https://yourdomain.com/sitemap.xml
 # =========================
 @app.route('/sitemap.xml')
 def sitemap():
+
+    base_url = os.environ.get("BASE_URL")
+
     conn = get_db()
-    audios = conn.execute("SELECT * FROM audios").fetchall()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM audios")
+
+    audios = cur.fetchall()
+
+    cur.close()
     conn.close()
 
     xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 '''
 
-    xml += '<url><loc>http://127.0.0.1:5000/</loc></url>'
+    xml += f'<url><loc>{base_url}/</loc></url>'
 
     for audio in audios:
-        xml += f'<url><loc>http://127.0.0.1:5000/audio/{audio["id"]}</loc></url>'
+        xml += f'<url><loc>{base_url}/audio/{audio["id"]}</loc></url>'
 
     xml += '</urlset>'
 
@@ -2879,15 +3061,16 @@ def mpesa_callback():
     data = request.json
 
     conn = get_db()
+    cur = conn.cursor()
 
-    conn.execute('''
+    cur.execute('''
     INSERT INTO payment_callbacks (
         mpesa_receipt,
         phone,
         amount,
         status,
         raw_callback_json
-    ) VALUES (?,?,?,?,?)
+    ) VALUES (%s,%s,%s,%s,%s)
     ''', (
         data.get('receipt', ''),
         data.get('phone', ''),
@@ -2897,14 +3080,20 @@ def mpesa_callback():
     ))
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
-    return jsonify({"ResultCode": 0, "ResultDesc": "Accepted"})
+    return jsonify({
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    }))
 
 
 # =========================
 # RUN
 # =========================
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
 
