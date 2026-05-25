@@ -5,3 +5,4 @@ cloudinary==1.41.0
 psycopg2-binary
 requests
 Pillow
+psycopg2-binary
