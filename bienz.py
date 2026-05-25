@@ -1527,6 +1527,29 @@ Secure User Access Portal
 
 <form method="POST">
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="margin-top:20px; text-align:center;">
+      {% for msg in messages %}
+        <p style="color:#00ffcc; font-weight:bold;">{{ msg }}</p>
+      {% endfor %}
+
+      <a href="/" style="
+        display:inline-block;
+        margin-top:15px;
+        padding:12px 22px;
+        background:linear-gradient(45deg,#00ffcc,#00ccff);
+        color:black;
+        font-weight:bold;
+        text-decoration:none;
+        border-radius:12px;
+      ">
+        HOME
+      </a>
+    </div>
+  {% endif %}
+{% endwith %}
+
 <input name="username" placeholder="Username" required>
 
 <input type="password" name="password" placeholder="Password" required>
