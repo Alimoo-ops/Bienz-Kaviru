@@ -231,8 +231,8 @@ gap:10px;
 
 body{
 background:url('/static/backgrounds/main_bg.jpg');
-background-attachment:scroll;
-background-size:cover;
+background-attachment:fixed;
+background-size:contain;
 background-position:center;
 background-repeat:no-repeat;
 font-family:Arial;
@@ -435,7 +435,7 @@ background:
 linear-gradient(rgba(0,0,0,0.88),rgba(0,0,0,0.92)),
 url('/static/backgrounds/main_bg.jpg');
 
-background-size:cover;
+background-size:contain;
 background-position:center;
 
 display:flex;
@@ -1111,7 +1111,7 @@ padding:40px;
 font-family:Arial;
 color:white;
 background:url('/static/backgrounds/login_bg.jpg');
-background-size:cover;
+background-size:contain;
 background-position:center;
 background-attachment:fixed;
 }
@@ -1452,7 +1452,7 @@ background:
 linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
 url('/static/backgrounds/login_bg.jpg');
 
-background-size:cover;
+background-size:contain;
 background-position:center;
 background-repeat:no-repeat;
 background-attachment:fixed;
@@ -1741,7 +1741,7 @@ background:
 linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
 url('/static/backgrounds/admin_bg.jpg');
 
-background-size:cover;
+background-size:contain;
 background-position:center;
 background-repeat:no-repeat;
 background-attachment:fixed;
@@ -2229,7 +2229,7 @@ background:
 linear-gradient(rgba(0,0,0,0.82),rgba(0,0,0,0.82)),
 url('/static/backgrounds/admin_bg.jpg');
 
-background-size:cover;
+background-size:contain;
 background-position:center;
 background-repeat:no-repeat;
 background-attachment:fixed;
