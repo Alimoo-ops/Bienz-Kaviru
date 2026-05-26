@@ -783,6 +783,9 @@ text-shadow:
 </head>
 
 <div id="splash-screen">
+<audio id="startup-audio" autoplay>
+    <source src="/static/audio/open.mp3" type="audio/mpeg">
+</audio>
 
 <h1 class="splash-title">
 KAVIRU MUSIC STORE
@@ -836,6 +839,32 @@ loading="lazy"
 <script>
 
 window.addEventListener("load", () => {
+
+const startupAudio = document.getElementById("startup-audio");
+
+if(startupAudio){
+
+startupAudio.volume = 0.7;
+
+startupAudio.play().catch(() => {
+
+document.body.addEventListener("click", () => {
+startupAudio.play();
+}, { once:true });
+
+});
+
+}
+
+setTimeout(() => {
+
+document.getElementById("splash-screen").style.display = "none";
+
+document.getElementById("main-content").style.display = "block";
+
+}, 700);
+
+});
 
 setTimeout(() => {
 
