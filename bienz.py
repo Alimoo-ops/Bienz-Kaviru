@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import cloudinary
 import cloudinary.uploader
+from flask import session, redirect, url_for, request
 
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
@@ -117,6 +118,17 @@ init_db()
 # =========================
 # HELPERS
 # =========================
+from functools import wraps
+from flask import request
+
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not session.get('user_id'):
+            return redirect(url_for('login', next=request.path))
+        return f(*args, **kwargs)
+    return wrapper
+
 def allowed_audio(filename):
     return "." in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_AUDIO
 
@@ -169,10 +181,9 @@ def is_admin():
 # =========================
 # HOME
 # =========================
-@app.route('/')
+@app.route('/home')
+@login_required
 def home():
-    if 'user_id' not in session:
-        return redirect('/login')
 
     conn = get_db()
     cur = conn.cursor()
@@ -1538,7 +1549,7 @@ Secure User Access Portal
 </form>
 
 <div class="footer">
-ARE YPU A MEMBER? <a href="/register">Register</a>
+ARE YOU A MEMBER? <a href="/register">Register</a>
 </div>
 
 </div>
@@ -1688,10 +1699,8 @@ margin:20px 0 10px;
 # AUDIO DETAILS
 # =========================
 @app.route('/audio/<int:audio_id>')
+@login_required
 def audio_details(audio_id):
-
-    if 'user_id' not in session:
-        return redirect('/login')
 
     conn = get_db()
     cur = conn.cursor()
@@ -1714,7 +1723,7 @@ def audio_details(audio_id):
     if 'user_id' in session:
         paid = user_paid(session['user_id'], audio_id)
 
-    return render_template_string(...)
+    return render_template_string('''
 
 <!DOCTYPE html>
 <html>
@@ -1890,6 +1899,7 @@ background:rgba(0,255,204,0.2);
 # MPESA PAYMENT SIMULATION
 # =========================
 @app.route('/pay/<int:audio_id>', methods=['POST'])
+@login_required
 def pay(audio_id):
     if 'user_id' not in session:
         return redirect('/login')
@@ -1957,9 +1967,10 @@ def pay(audio_id):
 # DOWNLOAD PROTECTED AUDIO
 # =========================
 @app.route('/download/<int:audio_id>')
+@login_required
 def download_audio(audio_id):
     if 'user_id' not in session:
-        return redirect('/login')
+        return "Access Denied"
 
     conn = get_db()
     cur = conn.cursor()
@@ -2006,10 +2017,11 @@ def download_audio(audio_id):
 # STREAM AUDIO
 # =========================
 @app.route('/stream/<int:audio_id>')
+@login_required
 def stream_audio(audio_id):
 
     if 'user_id' not in session:
-        return redirect('/login')
+        return "Access Denied"
 
     conn = get_db()
     cur = conn.cursor()
