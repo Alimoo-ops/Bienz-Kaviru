@@ -171,6 +171,8 @@ def is_admin():
 # =========================
 @app.route('/')
 def home():
+    if 'user_id' not in session:
+        return redirect('/login')
 
     conn = get_db()
     cur = conn.cursor()
@@ -1536,7 +1538,7 @@ Secure User Access Portal
 </form>
 
 <div class="footer">
-Don't have an account? <a href="/register">Register</a>
+ARE YPU A MEMBER? <a href="/register">Register</a>
 </div>
 
 </div>
@@ -1688,6 +1690,9 @@ margin:20px 0 10px;
 @app.route('/audio/<int:audio_id>')
 def audio_details(audio_id):
 
+    if 'user_id' not in session:
+        return redirect('/login')
+
     conn = get_db()
     cur = conn.cursor()
 
@@ -1709,7 +1714,7 @@ def audio_details(audio_id):
     if 'user_id' in session:
         paid = user_paid(session['user_id'], audio_id)
 
-    return render_template_string('''
+    return render_template_string(...)
 
 <!DOCTYPE html>
 <html>
@@ -1954,7 +1959,7 @@ def pay(audio_id):
 @app.route('/download/<int:audio_id>')
 def download_audio(audio_id):
     if 'user_id' not in session:
-        return "Access Denied"
+        return redirect('/login')
 
     conn = get_db()
     cur = conn.cursor()
@@ -2004,7 +2009,7 @@ def download_audio(audio_id):
 def stream_audio(audio_id):
 
     if 'user_id' not in session:
-        return "Access Denied"
+        return redirect('/login')
 
     conn = get_db()
     cur = conn.cursor()
