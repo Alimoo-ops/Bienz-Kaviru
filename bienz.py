@@ -369,8 +369,14 @@ box-shadow:0 0 10px rgba(0,0,0,0.4);
 .card img{
 width:100%;
 height:140px;
+
 object-fit:cover;
+
 transition:0.4s;
+
+display:block;
+
+border-radius:12px 12px 0 0;
 }
 
 .card:hover img{
@@ -709,6 +715,10 @@ box-shadow:
 0 0 40px rgba(0,0,0,0.6);
 
 transition:0.35s;
+
+max-width:320px;
+
+margin:auto;
 }
 
 .card:hover{
