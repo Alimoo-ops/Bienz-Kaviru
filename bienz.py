@@ -369,14 +369,10 @@ box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 .card img{
 width:100%;
-height:140px;
-
+aspect-ratio:1/1;
 object-fit:cover;
-
 transition:0.4s;
-
 display:block;
-
 border-radius:12px 12px 0 0;
 }
 
@@ -853,7 +849,7 @@ document.getElementById("main-content").style.display = "block";
 
 }, 1000);
 
-}, 3200);
+}, 2200);
 
 });
 
@@ -1922,9 +1918,8 @@ box-shadow:
 }
 
 .audio-image{
-
 width:100%;
-height:140px;
+height:160px;
 object-fit:cover;
 }
 
@@ -2151,7 +2146,7 @@ def upload_audio():
                 timeout=600,
                 transformation=[
                     {
-                        "width": 1200,
+                        "width": 2000,
                         "height": 1200,
                         "crop": "limit",
                         "quality": "auto"
