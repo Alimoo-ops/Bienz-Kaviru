@@ -2090,15 +2090,21 @@ def upload_audio():
         cover_file = request.files['cover']
 
         # VALIDATE FILES
+        if audio_file.filename == "":
+            return "No audio selected"
+
+        if cover_file.filename == "":
+            return "No image selected"
+
         if not allowed_audio(audio_file.filename):
-            return "Invalid audio format"
+            return f"Invalid audio format: {audio_file.filename}"
 
         if not allowed_image(cover_file.filename):
-            return "Invalid image format"
-
+            return f"Invalid image format: {cover_file.filename}"
+        
         # UPLOAD AUDIO TO CLOUDINARY
         audio_upload = cloudinary.uploader.upload(
-            audio_file,
+            audio_file.stream,
             resource_type="video",
             folder="biez_audio_store/audio"
         )
@@ -2108,7 +2114,7 @@ def upload_audio():
 
         # UPLOAD COVER TO CLOUDINARY
         cover_upload = cloudinary.uploader.upload(
-            cover_file,
+            cover_file.stream,
             folder="biez_audio_store/covers"
         )
 
