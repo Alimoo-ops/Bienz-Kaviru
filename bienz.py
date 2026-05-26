@@ -77,7 +77,7 @@ def init_db():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS purchases (
         id SERIAL PRIMARY KEY,
-        user_id INTEGER,
+        phone TEXT,
         audio_id INTEGER,
         paid INTEGER,
         amount REAL,
@@ -98,6 +98,14 @@ def init_db():
     )
     ''')
 
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username TEXT,
+        password TEXT,
+        created_at TEXT
+    )
+    ''')
     conn.commit()
     conn.close()
 
@@ -113,34 +121,19 @@ def allowed_audio(filename):
 
 def allowed_image(filename):
     return "." in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
-
-
-def current_user():
-        return None
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    cur.execute(
-        "SELECT * FROM users WHERE id=%s",
-        (session['user_id'],)
-    )
-
-    user = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
-    return user
-
-
+def is_admin():
+    return session.get("admin") == True
 def user_paid(user_id, audio_id):
+
     conn = get_db()
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
-        (user_id, audio_id)
+        """
+        SELECT * FROM purchases
+        WHERE audio_id=%s AND paid=1
+        """,
+        (audio_id,)
     )
 
     purchase = cur.fetchone()
@@ -148,12 +141,7 @@ def user_paid(user_id, audio_id):
     cur.close()
     conn.close()
 
-    return purchase
-
-
-def is_admin():
-    return session.get("admin") == True
-
+    return purchase is not None
 
 # =========================
 # HOME
@@ -816,6 +804,30 @@ Welcome to Kaviru Entertainment
   <span>⚡ Instant Access</span>
 </div>
 
+<p style="
+text-align:center;
+max-width:900px;
+margin:20px auto 50px auto;
+font-size:20px;
+line-height:1.8;
+color:#dffef7;
+
+text-shadow:
+0 2px 8px rgba(0,0,0,0.9);
+
+background:rgba(0,0,0,0.25);
+
+padding:22px 28px;
+
+border-radius:18px;
+
+backdrop-filter:blur(10px);
+
+border:1px solid rgba(255,255,255,0.08);
+">
+Experience the sound of passion, creativity, and authentic entertainment.
+Discover premium audio content crafted to inspire, entertain, and connect you to the Kaviru vibe.
+</p>
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
@@ -1066,6 +1078,9 @@ def audio_details(audio_id):
 
     paid = False
 
+    if 'user_id' in session:
+        paid = user_paid(0, audio_id)
+
     return render_template_string('''
 
 <!DOCTYPE html>
@@ -1074,6 +1089,33 @@ def audio_details(audio_id):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
+.flash{
+
+max-width:700px;
+
+margin:20px auto;
+
+padding:16px;
+
+border-radius:14px;
+
+background:rgba(0,255,153,0.15);
+
+border:1px solid rgba(0,255,153,0.35);
+
+color:#00ff99;
+
+font-weight:bold;
+
+text-align:center;
+
+backdrop-filter:blur(10px);
+
+box-shadow:
+0 0 20px rgba(0,255,153,0.18);
+
+}
 
 body{
 margin:0;
@@ -1193,6 +1235,14 @@ background:rgba(0,255,204,0.2);
 
 <body>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="flash">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <div class="audio-container">
 
     <img src="{{ audio['cover_image'] }}">
@@ -1245,16 +1295,11 @@ def pay(audio_id):
 
     audio = cur.fetchone()
 
-    if not audio:
-        cur.close()
-        conn.close()
-        return "Audio not found"
-
     receipt = "BIEZ" + secrets.token_hex(4).upper()
 
     cur.execute('''
     INSERT INTO purchases (
-        user_id,
+        phone,
         audio_id,
         paid,
         amount,
@@ -1263,7 +1308,7 @@ def pay(audio_id):
         purchase_date
     ) VALUES (%s,%s,%s,%s,%s,%s,%s)
     ''', (
-        0,
+        phone,
         audio_id,
         1,
         audio['price'],
@@ -1293,21 +1338,22 @@ def pay(audio_id):
     cur.close()
     conn.close()
 
-    return redirect(f'/stream/{audio_id}')
+    flash("Payment successful. Audio unlocked.")
+
+    return redirect(f'/audio/{audio_id}')
 
 # =========================
 # DOWNLOAD PROTECTED AUDIO
 # =========================
 @app.route('/download/<int:audio_id>')
 def download_audio(audio_id):
-        return "Access Denied"
 
     conn = get_db()
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
-        (session['user_id'], audio_id)
+        "SELECT * FROM purchases WHERE audio_id=%s AND paid=1",
+        (audio_id,)
     )
 
     purchase = cur.fetchone()
@@ -1315,7 +1361,7 @@ def download_audio(audio_id):
     if not purchase:
         cur.close()
         conn.close()
-        return "Access Denied"
+        return "Purchase required"
 
     if purchase['downloads_remaining'] <= 0:
         cur.close()
@@ -1339,23 +1385,20 @@ def download_audio(audio_id):
     cur.close()
     conn.close()
 
-    file_path = os.path.join(UPLOAD_FOLDER, audio['filename'])
-
-    return send_file(file_path, as_attachment=True)
+    return redirect(audio['filename'])
 
 # =========================
 # STREAM AUDIO
 # =========================
 @app.route('/stream/<int:audio_id>')
 def stream_audio(audio_id):
-        return "Access Denied"
 
     conn = get_db()
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM purchases WHERE user_id=%s AND audio_id=%s AND paid=1",
-        (session['user_id'], audio_id)
+        "SELECT * FROM purchases WHERE audio_id=%s AND paid=1",
+        (audio_id,)
     )
 
     purchase = cur.fetchone()
@@ -1363,7 +1406,7 @@ def stream_audio(audio_id):
     if not purchase:
         cur.close()
         conn.close()
-        return "Access Denied"
+        return "Purchase required"
 
     cur.execute(
         "SELECT * FROM audios WHERE id=%s",
@@ -2006,7 +2049,7 @@ UPLOADED TRACKS
 
 <img
 class="audio-image"
-src="/{{ audio['cover_image'] }}"
+src="{{ audio['cover_image'] }}"
 >
 
 <div class="audio-content">
