@@ -11,15 +11,16 @@ import cloudinary
 import cloudinary.uploader
 
 cloudinary.config(
-    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.environ.get("CLOUDINARY_API_KEY"),
-    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME", ""),
+    api_key=os.environ.get("CLOUDINARY_API_KEY", ""),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET", ""),
     secure=True
 )
 
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 
 # =========================
 # CONFIG
@@ -348,7 +349,7 @@ animation:shine 5s linear infinite;
 @keyframes shine{
 
 100%{
-left:160%;
+left:140%;
 }
 
 }
@@ -368,7 +369,7 @@ box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 .card img{
 width:100%;
-height:160px;
+height:140px;
 
 object-fit:cover;
 
@@ -819,7 +820,10 @@ Welcome to Kaviru Entertainment
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
-<img src="{{ audio['cover_image'] }}">
+<img
+src="{{ audio['cover_image'] }}"
+loading="lazy"
+>
 <div class="card-content">
 <h3>{{ audio['title'] }}</h3>
 <p>Genre: {{ audio['genre'] }}</p>
@@ -1234,7 +1238,10 @@ background:rgba(0,255,204,0.2);
 
 <div class="audio-container">
 
-    <img src="{{ audio['cover_image'] }}">
+    <img
+    src="{{ audio['cover_image'] }}"
+    loading="lazy"
+    >
 
     <h1>{{ audio['title'] }}</h1>
 
@@ -2076,83 +2083,129 @@ KES {{ audio['price'] }}
 # =========================
 @app.route('/admin/upload', methods=['GET', 'POST'])
 def upload_audio():
+
     if not is_admin():
         return redirect('/admin')
 
     if request.method == 'POST':
 
-        title = request.form['title']
-        genre = request.form['genre']
-        price = request.form['price']
-        duration = request.form['duration']
+        try:
 
-        audio_file = request.files['audio']
-        cover_file = request.files['cover']
+            title = request.form.get('title')
+            genre = request.form.get('genre')
+            duration = request.form.get('duration')
+            price = request.form.get('price')
 
-        # VALIDATE FILES
-        if audio_file.filename == "":
-            return "No audio selected"
+            audio_file = request.files.get('audio')
+            cover_file = request.files.get('cover')
 
-        if cover_file.filename == "":
-            return "No image selected"
+            # VALIDATION
+            if not audio_file:
+                return "Audio file missing"
 
-        if not allowed_audio(audio_file.filename):
-            return f"Invalid audio format: {audio_file.filename}"
+            if not cover_file:
+                return "Cover image missing"
 
-        if not allowed_image(cover_file.filename):
-            return f"Invalid image format: {cover_file.filename}"
-        
-        # UPLOAD AUDIO TO CLOUDINARY
-        audio_upload = cloudinary.uploader.upload(
-            audio_file.stream,
-            resource_type="video",
-            folder="biez_audio_store/audio"
-        )
+            if audio_file.filename == "":
+                return "No audio selected"
 
-        # GET AUDIO URL
-        audio_filename = audio_upload["secure_url"]
+            if cover_file.filename == "":
+                return "No cover selected"
 
-        # UPLOAD COVER TO CLOUDINARY
-        cover_upload = cloudinary.uploader.upload(
-            cover_file.stream,
-            folder="biez_audio_store/covers"
-        )
+            if not allowed_audio(audio_file.filename):
+                return "Invalid audio format"
 
-        # GET COVER URL
-        cover_filename = cover_upload["secure_url"]
+            if not allowed_image(cover_file.filename):
+                return "Invalid image format"
 
-        # DATABASE INSERT
-        conn = get_db()
-        cur = conn.cursor()
+            # SAFE PRICE
+            try:
+                price = float(price)
+            except:
+                return "Invalid price"
 
-        cur.execute('''
-            INSERT INTO audios (
-                title,
-                filename,
-                cover_image,
-                genre,
-                price,
-                duration,
-                upload_date
-            ) VALUES (%s,%s,%s,%s,%s,%s,%s)
-        ''', (
-            title,
-            audio_filename,
-            cover_filename,
-            genre,
-            float(price),
-            duration,
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ))
+            # ======================
+            # UPLOAD AUDIO
+            # ======================
 
-        conn.commit()
+            audio_upload = cloudinary.uploader.upload(
+                audio_file,
+                resource_type="video",
+                folder="biez_audio_store/audio"
+            )
 
-        cur.close()
-        conn.close()
+            audio_url = audio_upload.get("secure_url")
 
-        flash("Audio uploaded successfully")
+            if not audio_url:
+                return "Audio upload failed"
 
-        return redirect('/admin/dashboard')
+            # ======================
+            # UPLOAD COVER
+            # ======================
+            cover_upload = cloudinary.uploader.upload(
+                cover_file,
+                folder="biez_audio_store/covers",
+                use_filename=True,
+                unique_filename=True,
+                overwrite=False,
+                timeout=600,
+                transformation=[
+                    {
+                        "width": 1200,
+                        "height": 1200,
+                        "crop": "limit",
+                        "quality": "auto"
+                    }
+                ]
+            )
+
+            cover_url = cover_upload.get("secure_url")
+
+            if not cover_url:
+                return "Cover upload failed"
+
+            # ======================
+            # SAVE DATABASE
+            # ======================
+
+            conn = get_db()
+            cur = conn.cursor()
+
+            cur.execute(
+                '''
+                INSERT INTO audios (
+                    title,
+                    filename,
+                    cover_image,
+                    genre,
+                    price,
+                    duration,
+                    upload_date
+                )
+                VALUES (%s,%s,%s,%s,%s,%s,%s)
+                ''',
+                (
+                    title,
+                    audio_url,
+                    cover_url,
+                    genre,
+                    price,
+                    duration,
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+            )
+
+            conn.commit()
+
+            cur.close()
+            conn.close()
+
+            flash("Audio uploaded successfully")
+
+            return redirect('/admin/dashboard')
+
+        except Exception as e:
+            return f"UPLOAD ERROR: {str(e)}"
 
     return render_template_string('''
 
