@@ -61,16 +61,6 @@ def init_db():
     cur = conn.cursor()
 
     cur.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username TEXT UNIQUE,
-        email TEXT,
-        phone TEXT,
-        password_hash TEXT
-    )
-    ''')
-
-    cur.execute('''
     CREATE TABLE IF NOT EXISTS audios (
         id SERIAL PRIMARY KEY,
         title TEXT,
@@ -126,7 +116,6 @@ def allowed_image(filename):
 
 
 def current_user():
-    if 'user_id' not in session:
         return None
 
     conn = get_db()
@@ -812,13 +801,6 @@ BIEZ KAVIRU MUSIC STORE
 </div>
 <div class="nav neon-nav">
 <a href="/">Home</a>
-{% if session.get('user_id') %}
-<a href="/dashboard">Dashboard</a>
-<a href="/logout">Logout</a>
-{% else %}
-<a href="/login">Login</a>
-<a href="/register">Register</a>
-{% endif %}
 <a href="/admin">Admin</a>
 </div>
 </header>
@@ -834,30 +816,6 @@ Welcome to Kaviru Entertainment
   <span>⚡ Instant Access</span>
 </div>
 
-<p style="
-text-align:center;
-max-width:900px;
-margin:20px auto 50px auto;
-font-size:20px;
-line-height:1.8;
-color:#dffef7;
-
-text-shadow:
-0 2px 8px rgba(0,0,0,0.9);
-
-background:rgba(0,0,0,0.25);
-
-padding:22px 28px;
-
-border-radius:18px;
-
-backdrop-filter:blur(10px);
-
-border:1px solid rgba(255,255,255,0.08);
-">
-Experience the sound of passion, creativity, and authentic entertainment.
-Discover premium audio content crafted to inspire, entertain, and connect you to the Kaviru vibe.
-</p>
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
@@ -1084,604 +1042,6 @@ max-width:300px;
 </html>
     ''', audios=audios)
 
-
-# =========================
-# REGISTER
-# =========================
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        phone = request.form['phone']
-        password = generate_password_hash(request.form['password'])
-
-        conn = get_db()
-        cur = conn.cursor()
-
-        try:
-            cur.execute(
-                "INSERT INTO users (username,email,phone,password_hash) VALUES (%s,%s,%s,%s)",
-                (username, email, phone, password)
-            )
-
-            conn.commit()
-
-            flash("Registration successful")
-            return redirect('/login')
-
-        except Exception as e:
-            conn.rollback()
-            flash("Username already exists")
-
-        finally:
-            cur.close()
-            conn.close()
-
-    return render_template_string('''
-<!DOCTYPE html>
-<html>
-<head>
-<title>Register | BIEZ KAVIRU MUSIC STORE</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-body{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-
-background:
-linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.85)),
-url('/static/backgrounds/login_bg.jpg');
-
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-background-attachment:fixed;
-
-color:white;
-padding:20px;
-}
-
-.register-box{
-width:100%;
-max-width:650px;
-
-padding:50px 35px;
-
-background:rgba(20,20,20,0.85);
-backdrop-filter:blur(14px);
-
-border-radius:25px;
-
-border:1px solid rgba(0,255,204,0.25);
-
-box-shadow:
-0 0 30px rgba(0,255,204,0.12),
-0 0 80px rgba(0,0,0,0.7);
-
-text-align:center;
-}
-
-.cinema-heading{
-font-family:'Cinzel', serif;
-font-size:52px;
-text-align:center;
-letter-spacing:6px;
-text-transform:uppercase;
-font-weight:800;
-
-color:#ffffff;
-
-margin-top:40px;
-margin-bottom:20px;
-
-text-shadow:
-0 3px 10px rgba(0,0,0,0.9),
-0 0 25px rgba(0,255,204,0.15),
-0 0 60px rgba(0,255,204,0.08);
-
-position:relative;
-
-animation:cinematicFade 1.8s ease-in-out;
-}
-
-@keyframes cinematicFade{
-from{
-opacity:0;
-transform:translateY(25px) scale(0.98);
-}
-to{
-opacity:1;
-transform:translateY(0) scale(1);
-}
-}
-
-.cinema-heading::after{
-content:"";
-display:block;
-width:180px;
-height:2px;
-margin:18px auto 0;
-background:linear-gradient(90deg,transparent,#00ffcc,transparent);
-box-shadow:0 0 15px rgba(0,255,204,0.4);
-}
-
-.logo{
-font-size:42px;
-font-weight:900;
-color:#00ffcc;
-letter-spacing:3px;
-margin-bottom:10px;
-
-text-shadow:
-0 0 10px rgba(0,255,204,0.6),
-0 0 25px rgba(0,255,204,0.4);
-}
-
-.subtitle{
-color:#ddd;
-margin-bottom:35px;
-font-size:16px;
-}
-
-input{
-width:100%;
-padding:18px;
-
-margin-bottom:15px;
-
-border:none;
-outline:none;
-
-border-radius:12px;
-
-background:#111;
-color:white;
-
-font-size:16px;
-
-border:1px solid rgba(255,255,255,0.1);
-
-transition:0.3s;
-}
-
-input:focus{
-border:1px solid #00ffcc;
-box-shadow:0 0 10px rgba(0,255,204,0.35);
-}
-
-button{
-width:100%;
-padding:18px;
-
-border:none;
-border-radius:12px;
-
-background:linear-gradient(45deg,#00ffcc,#00ccff);
-
-color:black;
-font-weight:bold;
-font-size:18px;
-
-cursor:pointer;
-transition:0.3s;
-
-box-shadow:0 0 15px rgba(0,255,204,0.25);
-}
-
-button:hover{
-transform:scale(1.03);
-box-shadow:0 0 25px rgba(0,255,204,0.5);
-}
-
-.footer{
-margin-top:20px;
-font-size:13px;
-color:#888;
-}
-
-a{
-color:#00ffcc;
-text-decoration:none;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="register-box">
-
-<div class="logo">BIEZ AUDIO</div>
-
-<div class="subtitle">
-Create your free account
-</div>
-
-<form method="POST">
-
-<input name="username" placeholder="Username" required>
-
-<input name="email" placeholder="Email" required>
-
-<input name="phone" placeholder="Phone (2547XXXXXXX)" required>
-
-<input type="password" name="password" placeholder="Password" required>
-
-<button type="submit">CREATE ACCOUNT</button>
-
-</form>
-
-<div class="footer">
-Already have an account? <a href="/login">Login</a>
-</div>
-
-</div>
-
-</body>
-</html>
-''')
-
-
-# =========================
-# LOGIN
-# =========================
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-
-        conn = get_db()
-        cur = conn.cursor()
-
-        try:
-
-            cur.execute(
-                "SELECT * FROM users WHERE username=%s",
-                (username,)
-            )
-
-            user = cur.fetchone()
-
-            if user and check_password_hash(user['password_hash'], password):
-
-                session['user_id'] = user['id']
-                session['username'] = user['username']
-
-                flash("Login successful")
-
-                return redirect('/dashboard')
-
-            flash("Invalid credentials")
-
-        except Exception as e:
-
-            flash("Login error")
-
-        finally:
-
-            cur.close()
-            conn.close()
-
-    return render_template_string('''
-<!DOCTYPE html>
-<html>
-<head>
-<title>User Login | BIEZ KAVIRU MUSIC STORE</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-body{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-
-background:
-linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.85)),
-url('/static/backgrounds/login_bg.jpg');
-
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-background-attachment:fixed;
-
-color:white;
-padding:20px;
-}
-
-.login-box{
-width:100%;
-max-width:650px;
-
-padding:50px 35px;
-
-background:rgba(20,20,20,0.85);
-backdrop-filter:blur(14px);
-
-border-radius:25px;
-
-border:1px solid rgba(0,255,204,0.25);
-
-box-shadow:
-0 0 30px rgba(0,255,204,0.12),
-0 0 80px rgba(0,0,0,0.7);
-
-text-align:center;
-}
-
-.logo{
-font-size:42px;
-font-weight:900;
-color:#00ffcc;
-letter-spacing:3px;
-margin-bottom:10px;
-
-text-shadow:
-0 0 10px rgba(0,255,204,0.6),
-0 0 25px rgba(0,255,204,0.4);
-}
-
-.subtitle{
-color:#ddd;
-margin-bottom:35px;
-font-size:16px;
-}
-
-input{
-width:100%;
-padding:18px;
-
-margin-bottom:15px;
-
-border:none;
-outline:none;
-
-border-radius:12px;
-
-background:#111;
-color:white;
-
-font-size:16px;
-
-border:1px solid rgba(255,255,255,0.1);
-
-transition:0.3s;
-}
-
-input:focus{
-border:1px solid #00ffcc;
-box-shadow:0 0 10px rgba(0,255,204,0.35);
-}
-
-button{
-width:100%;
-padding:18px;
-
-border:none;
-border-radius:12px;
-
-background:linear-gradient(45deg,#00ffcc,#00ccff);
-
-color:black;
-font-weight:bold;
-font-size:18px;
-
-cursor:pointer;
-transition:0.3s;
-
-box-shadow:0 0 15px rgba(0,255,204,0.25);
-}
-
-button:hover{
-transform:scale(1.03);
-box-shadow:0 0 25px rgba(0,255,204,0.5);
-}
-
-.footer{
-margin-top:20px;
-font-size:13px;
-color:#888;
-}
-
-a{
-color:#00ffcc;
-text-decoration:none;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="login-box">
-
-<div class="logo">BIEZ AUDIO</div>
-
-<div class="subtitle">
-Secure User Access Portal
-</div>
-
-<form method="POST">
-
-<input name="username" placeholder="Username" required>
-
-<input type="password" name="password" placeholder="Password" required>
-
-<button type="submit">LOGIN</button>
-
-</form>
-
-<div class="footer">
-ARE YOU A MEMBER? <a href="/register">Register</a>
-</div>
-
-</div>
-
-</body>
-</html>
-''')
-
-
-# =========================
-# LOGOUT
-# =========================
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/')
-
-
-# =========================
-# DASHBOARD
-# =========================
-@app.route('/dashboard')
-def dashboard():
-    if 'user_id' not in session:
-        return redirect('/login')
-
-    conn = get_db()
-    cur = conn.cursor()
-
-    cur.execute('''
-        SELECT purchases.*, audios.title
-        FROM purchases
-        JOIN audios ON purchases.audio_id = audios.id
-        WHERE purchases.user_id=%s
-    ''', (session['user_id'],))
-
-    purchases = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return render_template_string('''
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-margin:0;
-font-family:Arial;
-color:white;
-background:url('/static/backgrounds/main_bg.jpg');
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:30px;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
-background:rgba(0,0,0,0.5);
-backdrop-filter:blur(12px);
-border-bottom:1px solid rgba(0,255,204,0.2);
-border-radius:15px;
-margin-bottom:25px;
-}
-
-.header h1{
-color:#00ffcc;
-}
-
-.card{
-background:rgba(0,0,0,0.55);
-backdrop-filter:blur(12px);
-border:1px solid rgba(0,255,204,0.15);
-border-radius:18px;
-padding:20px;
-margin-bottom:15px;
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-.btn{
-display:inline-block;
-padding:10px 16px;
-background:linear-gradient(45deg,#00ffcc,#00ccff);
-color:black;
-border-radius:12px;
-text-decoration:none;
-font-weight:bold;
-margin-right:8px;
-}
-
-.section-title{
-color:#00ffcc;
-font-size:24px;
-margin:20px 0 10px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="header">
-    <h1>Welcome {{ session['username'] }}</h1>
-
-    <div style="display:flex; gap:10px;">
-        <a class="btn" href="/">🏠 Home</a>
-        <a class="btn" href="/logout">🚪 Logout</a>
-    </div>
-</div>
-
-<div class="section-title">Your Purchases</div>
-
-{% for item in purchases %}
-<div class="card">
-    <h2>{{ item['title'] }}</h2>
-    <p>Downloads Remaining: {{ item['downloads_remaining'] }}</p>
-
-    <a class="btn" href="/stream/{{ item['audio_id'] }}">Stream</a>
-    <a class="btn" href="/download/{{ item['audio_id'] }}">Download</a>
-</div>
-{% endfor %}
-
-</div>
-
-</body>
-</html>
-''', purchases=purchases)
-
-
 # =========================
 # AUDIO DETAILS
 # =========================
@@ -1705,9 +1065,6 @@ def audio_details(audio_id):
         abort(404)
 
     paid = False
-
-    if 'user_id' in session:
-        paid = user_paid(session['user_id'], audio_id)
 
     return render_template_string('''
 
@@ -1845,15 +1202,6 @@ background:rgba(0,255,204,0.2);
     <p>Genre: {{ audio['genre'] }}</p>
     <p>Price: KES {{ audio['price'] }}</p>
 
-    {% if paid %}
-
-        <div class="action-links">
-            <a href="/stream/{{ audio['id'] }}">Listen Now</a>
-            <a href="/download/{{ audio['id'] }}">Download</a>
-        </div>
-
-    {% else %}
-
         <div class="lock-box">
 
             <h3>Locked Premium Audio</h3>
@@ -1872,8 +1220,6 @@ background:rgba(0,255,204,0.2);
 
         </div>
 
-    {% endif %}
-
 </div>
 
 </body>
@@ -1886,8 +1232,6 @@ background:rgba(0,255,204,0.2);
 # =========================
 @app.route('/pay/<int:audio_id>', methods=['POST'])
 def pay(audio_id):
-    if 'user_id' not in session:
-        return redirect('/login')
 
     phone = request.form['phone']
 
@@ -1900,6 +1244,11 @@ def pay(audio_id):
     )
 
     audio = cur.fetchone()
+
+    if not audio:
+        cur.close()
+        conn.close()
+        return "Audio not found"
 
     receipt = "BIEZ" + secrets.token_hex(4).upper()
 
@@ -1914,7 +1263,7 @@ def pay(audio_id):
         purchase_date
     ) VALUES (%s,%s,%s,%s,%s,%s,%s)
     ''', (
-        session['user_id'],
+        0,
         audio_id,
         1,
         audio['price'],
@@ -1944,16 +1293,13 @@ def pay(audio_id):
     cur.close()
     conn.close()
 
-    flash("Payment successful. Audio unlocked.")
-
-    return redirect(f'/audio/{audio_id}')
+    return redirect(f'/stream/{audio_id}')
 
 # =========================
 # DOWNLOAD PROTECTED AUDIO
 # =========================
 @app.route('/download/<int:audio_id>')
 def download_audio(audio_id):
-    if 'user_id' not in session:
         return "Access Denied"
 
     conn = get_db()
@@ -2002,8 +1348,6 @@ def download_audio(audio_id):
 # =========================
 @app.route('/stream/<int:audio_id>')
 def stream_audio(audio_id):
-
-    if 'user_id' not in session:
         return "Access Denied"
 
     conn = get_db()
@@ -3074,4 +2418,3 @@ def mpesa_callback():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
