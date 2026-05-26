@@ -190,7 +190,7 @@ overflow-x:hidden;
 
 .container{
 width:100%;
-max-width:1400px;
+max-width:160px;
 margin:auto;
 padding:20px;
 }
@@ -368,7 +368,7 @@ box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 .card img{
 width:100%;
-height:140px;
+height:160px;
 
 object-fit:cover;
 
@@ -651,7 +651,7 @@ content:"";
 
 display:block;
 
-width:140px;
+width:160px;
 
 height:3px;
 
@@ -1917,7 +1917,7 @@ box-shadow:
 .audio-image{
 
 width:100%;
-height:140px;
+height:160px;
 object-fit:cover;
 }
 
