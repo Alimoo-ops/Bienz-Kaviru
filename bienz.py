@@ -769,7 +769,7 @@ text-shadow:
 <div id="splash-screen">
 
 <h1 class="splash-title">
-🎧 KAVIRU ENTERTAINMENT 🎧
+KAVIRU MUSIC STORE
 </h1>
 
 <p class="splash-sub">
@@ -797,37 +797,6 @@ BIEZ KAVIRU MUSIC STORE
 <h2 class="neon-heading">
 Welcome to Kaviru Entertainment
 </h2>
-
-<div class="tagline-badges">
-  <span>🎵 Premium Audio</span>
-  <span>💎 Exclusive Drops</span>
-  <span>⚡ Instant Access</span>
-</div>
-
-<p style="
-text-align:center;
-max-width:900px;
-margin:20px auto 50px auto;
-font-size:20px;
-line-height:1.8;
-color:#dffef7;
-
-text-shadow:
-0 2px 8px rgba(0,0,0,0.9);
-
-background:rgba(0,0,0,0.25);
-
-padding:22px 28px;
-
-border-radius:18px;
-
-backdrop-filter:blur(10px);
-
-border:1px solid rgba(255,255,255,0.08);
-">
-Experience the sound of passion, creativity, and authentic entertainment.
-Discover premium audio content crafted to inspire, entertain, and connect you to the Kaviru vibe.
-</p>
 <div class="grid">
 {% for audio in audios %}
 <div class="card">
