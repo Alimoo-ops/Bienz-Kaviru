@@ -1988,9 +1988,17 @@ font-size:32px;
 BIEZ ADMIN
 </div>
 
+<div style="display:flex; gap:15px; flex-wrap:wrap;">
+
+<a class="upload-btn" href="/">
+HOME
+</a>
+
 <a class="upload-btn" href="/admin/upload">
 UPLOAD AUDIO
 </a>
+
+</div>
 
 </div>
 
