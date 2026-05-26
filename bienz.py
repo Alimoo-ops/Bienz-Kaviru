@@ -190,7 +190,7 @@ overflow-x:hidden;
 
 .container{
 width:100%;
-max-width:160px;
+max-width:1400px;
 margin:auto;
 padding:20px;
 }
@@ -651,7 +651,7 @@ content:"";
 
 display:block;
 
-width:160px;
+width:140px;
 
 height:3px;
 
@@ -1917,7 +1917,7 @@ box-shadow:
 .audio-image{
 
 width:100%;
-height:160px;
+height:140px;
 object-fit:cover;
 }
 
