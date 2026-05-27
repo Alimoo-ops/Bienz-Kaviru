@@ -784,7 +784,7 @@ text-shadow:
 
 <div id="splash-screen">
 <audio id="startup-audio" autoplay>
-    <source src="/static/audio/open.mp3" type="audio/mpeg">
+    <source src="/static/audio/Biez.mp3" type="audio/mpeg">
 </audio>
 
 <h1 class="splash-title">
