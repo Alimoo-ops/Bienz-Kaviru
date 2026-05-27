@@ -783,7 +783,7 @@ text-shadow:
 </head>
 
 <div id="splash-screen">
-<audio id="startup-audio" autoplay>
+<audio id="startup-audio">
     <source src="/static/audio/Biez.mp3" type="audio/mpeg">
 </audio>
 
@@ -827,7 +827,7 @@ loading="lazy"
 <h3>{{ audio['title'] }}</h3>
 <p>Genre: {{ audio['genre'] }}</p>
 <p>Duration: {{ audio['duration'] }}</p>
-<p>KES {{ audio['price'] }}</p>
+<p>Ksh {{ audio['price'] }}</p>
 <a class="btn" href="/audio/{{ audio['id'] }}">Listen (Audio)</a>
 </div>
 </div>
@@ -840,45 +840,37 @@ loading="lazy"
 
 window.addEventListener("load", () => {
 
-const startupAudio = document.getElementById("startup-audio");
+    const startupAudio = document.getElementById("startup-audio");
 
-if(startupAudio){
+    if(startupAudio){
 
-startupAudio.volume = 0.7;
+        startupAudio.volume = 0.7;
 
-startupAudio.play().catch(() => {
+        startupAudio.play().catch(() => {
 
-document.body.addEventListener("click", () => {
-startupAudio.play();
-}, { once:true });
+            document.body.addEventListener("click", () => {
+                startupAudio.play();
+            }, { once:true });
 
-});
+        });
 
-}
+    }
 
-setTimeout(() => {
+    document.getElementById("main-content").style.display = "none";
 
-document.getElementById("splash-screen").style.display = "none";
+    setTimeout(() => {
 
-document.getElementById("main-content").style.display = "block";
+        document.getElementById("splash-screen").style.opacity = "0";
 
-}, 700);
+        setTimeout(() => {
 
-});
+            document.getElementById("splash-screen").style.display = "none";
 
-setTimeout(() => {
+            document.getElementById("main-content").style.display = "block";
 
-document.getElementById("splash-screen").style.opacity = "0";
+        }, 800);
 
-setTimeout(() => {
-
-document.getElementById("splash-screen").style.display = "none";
-
-document.getElementById("main-content").style.display = "block";
-
-}, 1000);
-
-}, 2200);
+    }, 2200);
 
 });
 
@@ -1271,7 +1263,7 @@ background:rgba(0,255,204,0.2);
     <h1>{{ audio['title'] }}</h1>
 
     <p>Genre: {{ audio['genre'] }}</p>
-    <p>Price: KES {{ audio['price'] }}</p>
+    <p>Price: Ksh {{ audio['price'] }}</p>
 
         <div class="lock-box">
 
@@ -2059,7 +2051,7 @@ TOTAL REVENUE
 </div>
 
 <div class="stat-value">
-KES {{ revenue['total'] or 0 }}
+Ksh {{ revenue['total'] or 0 }}
 </div>
 </div>
 
@@ -2087,7 +2079,7 @@ src="{{ audio['cover_image'] }}"
 </div>
 
 <div class="audio-price">
-KES {{ audio['price'] }}
+Ksh {{ audio['price'] }}
 </div>
 
 <div class="audio-date">
@@ -2433,7 +2425,7 @@ Upload Premium Audio Content
 
 <input name="duration" placeholder="Duration e.g 3:45" required>
 
-<input name="price" placeholder="Price (KES)" required>
+<input name="price" placeholder="Price (Ksh)" required>
 
 <label>Upload Audio File</label>
 <input type="file" name="audio" accept=".mp3,.wav" required>
