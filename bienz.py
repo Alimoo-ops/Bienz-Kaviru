@@ -783,6 +783,7 @@ text-shadow:
 </head>
 
 <div id="splash-screen">
+
 <audio id="startup-audio">
     <source src="/static/audio/Biez.mp3" type="audio/mpeg">
 </audio>
@@ -792,7 +793,7 @@ KAVIRU MUSIC STORE
 </h1>
 
 <p class="splash-sub">
-Loading premium sound experience...
+Tap anywhere to enter
 </p>
 
 <div class="music-bars">
@@ -842,22 +843,22 @@ window.addEventListener("load", () => {
 
     const startupAudio = document.getElementById("startup-audio");
 
-    if(startupAudio){
-
-        startupAudio.volume = 0.7;
-
-        startupAudio.play().catch(() => {
-
-            document.body.addEventListener("click", () => {
-                startupAudio.play();
-            }, { once:true });
-
-        });
-
-    }
-
     document.getElementById("main-content").style.display = "none";
 
+    // play audio ONLY after first user interaction
+    document.body.addEventListener("click", () => {
+
+        if(startupAudio){
+
+            startupAudio.volume = 0.7;
+
+            startupAudio.play();
+
+        }
+
+    }, { once:true });
+
+    // splash timing
     setTimeout(() => {
 
         document.getElementById("splash-screen").style.opacity = "0";
