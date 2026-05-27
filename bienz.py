@@ -841,33 +841,49 @@ loading="lazy"
 
 window.addEventListener("load", () => {
 
+    const splash = document.getElementById("splash-screen");
+    const main = document.getElementById("main-content");
     const startupAudio = document.getElementById("startup-audio");
 
-    document.getElementById("main-content").style.display = "none";
+    main.style.display = "none";
 
-    // play audio ONLY after first user interaction
-    document.body.addEventListener("click", () => {
+    // START AUDIO IMMEDIATELY
+    if(startupAudio){
 
-        if(startupAudio){
+        startupAudio.volume = 0.7;
 
-            startupAudio.volume = 0.7;
+        const playPromise = startupAudio.play();
 
-            startupAudio.play();
+        if(playPromise !== undefined){
+
+            playPromise.catch(() => {
+
+                // if browser blocks autoplay,
+                // play on first touch/click
+                const startAudio = () => {
+                    startupAudio.play();
+                    document.removeEventListener("click", startAudio);
+                    document.removeEventListener("touchstart", startAudio);
+                };
+
+                document.addEventListener("click", startAudio);
+                document.addEventListener("touchstart", startAudio);
+
+            });
 
         }
 
-    }, { once:true });
+    }
 
-    // splash timing
+    // HIDE SPLASH
     setTimeout(() => {
 
-        document.getElementById("splash-screen").style.opacity = "0";
+        splash.style.opacity = "0";
 
         setTimeout(() => {
 
-            document.getElementById("splash-screen").style.display = "none";
-
-            document.getElementById("main-content").style.display = "block";
+            splash.style.display = "none";
+            main.style.display = "block";
 
         }, 800);
 
